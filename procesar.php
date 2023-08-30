@@ -321,7 +321,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
             </h4>
             <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample" style="">
               <div class="accordion-body">
-              	<?php echo '<pre>'.htmlentities($xml->asXML()).'</pre>'; ?>
+                <pre>
+                <?php 
+                // Crear un objeto DOMDocument
+                $dom = new DOMDocument();
+                $dom->preserveWhiteSpace = false;
+                $dom->formatOutput = true;
+                $dom->loadXML($xml->asXML());
+                
+                // Obtener el XML formateado como string
+                $prettyXml = $dom->saveXML();
+                
+                
+                echo highlight_string($prettyXml); ?>
+                </pre>
               </div>
             </div>
           </div>
