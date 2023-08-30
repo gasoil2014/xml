@@ -5,7 +5,7 @@
               <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
 				<img class="bi me-2" height="22" role="img" aria-label="Bootstrap" src="assets/brand/primetec.png">
               </a>
-              <span class="mb-3 mb-md-0 text-body-secondary">© 2023 <a class="text-decoration-none text-body-secondary" href="https://primetec.com.ar" target="_blank">Primetec</a></span>
+              <span class="mb-3 mb-md-0 text-body-secondary">© 2023 <a class="text-decoration-none text-body-secondary" href="https://primetec.com.ar" target="_blank">Primetec</a> - Versión 0.5</span>
             </div>
         </footer>
 		<script src="assets/js/color-modes.js"></script>

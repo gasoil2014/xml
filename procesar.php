@@ -72,7 +72,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
         $sheet = $excel->getActiveSheet();
         
         // Valido que los registros cabecera estén correctos
-        $nombrearchivoxml = $sheet->getCell('B1')->getValue(); //B2: Nombre de archivo xml
+        // TO DO Tomar el directorio del config
+        $nombrearchivoxml = 'archive/'.$sheet->getCell('B1')->getValue(); //B2: Nombre de archivo xml
         $MsgId = $sheet->getCell('C2')->getValue(); // C2: Encabezado del XML
         $MsgId = $MsgId.date('YmdHis');
         $CreDtTm  = $sheet->getCell('C3')->getOldCalculatedValue();// C3: FORMULA: hora de generacion del xml → YYYY-MM-DDTHH:MM:SS
@@ -310,6 +311,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
     <div id="divExito" class="">
       <h4 class="mb-5">El archivo Excel se ha convertido a XML correctamente.</h4>
       <h4 class="mb-5">Qué deseas hacer?</h4>
+      <div class="bd-example-snippet bd-code-snippet"><div class="bd-example mb-5 border-0">
+        <div class="accordion" id="accordionExample">
+          <div class="accordion-item">
+            <h4 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                <?php echo $nombrearchivoxml?>.xml
+              </button>
+            </h4>
+            <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample" style="">
+              <div class="accordion-body">
+              	<?php echo '<pre>'.htmlentities($xml->asXML()).'</pre>'; ?>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div></div>
       
       <div class="d-grid gap-2 mb-3">
         <a href="<?php echo $nombrearchivoxml; ?>" target="_blank" class="btn btn-success">Descargar Archivo XML</a>
@@ -317,6 +334,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
       
       <div class="d-grid gap-2 mb-5">
         <a href="enviar_por_internet.php?archivo=<?php echo $nombrearchivoxml; ?>" class="btn btn-primary">Enviar por Internet</a>
+        <p><em>* La acción será registrada</em></p>
+      </div>
+      
+      <div class="d-grid gap-2 mb-5">
+        <button type=""button href="index.php" class="float-right btn btn-outline-secondary">Volver</button>
       </div>
       <br>
     </div>
