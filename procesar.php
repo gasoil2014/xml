@@ -42,13 +42,14 @@
 require 'assets/PHPExcel/PHPExcel.php';
 
 // Defino las variables para utilizar luego
-$nombrearchivoxml = ''; //B2: Nombre de archivo xml
-$MsgId = ''; // C2: Encabezado del XML
-$CreDtTm  = ''; // C3: FORMULA: hora de generacion del xml → YYYY-MM-DDTHH:MM:SS
-$NbOfTxs  = ''; // C4: Cantidad de registros
-$CtrlSum  = ''; // C5: Suma total
-$empresa = ''; // C6: Nombre de la empresa
-$nroempresa = ''; // F6: Numero de empresa
+$nombrearchivoxml = ''; //C2: Nombre de archivo xml
+$MsgId = ''; // C3: Encabezado del XML
+$empresa = ''; // C4: Nombre de la empresa
+$nroempresa = ''; // C5: Numero de empresa
+
+$CreDtTm  = date("Y-m-d\TH:i:s"); // Fecha actual en formato → YYYY-MM-DDTHH:MM:SS
+//$NbOfTxs  = ''; // C4: Cantidad de registros
+$CtrlSum  = 0; // C5: Suma total
 
 $error=0;
 $msgs = array();
@@ -73,18 +74,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
         
         // Valido que los registros cabecera estén correctos
         // TO DO Tomar el directorio del config
-        $nombrearchivoxml = 'archive/'.$sheet->getCell('B1')->getValue(); //B2: Nombre de archivo xml
-        $MsgId = $sheet->getCell('C2')->getValue(); // C2: Encabezado del XML
+        $nombrearchivoxml = 'archive/'.$sheet->getCell('C2')->getValue(); //B2: Nombre de archivo xml
+        $MsgId = $sheet->getCell('C3')->getValue(); // C2: Encabezado del XML
         $MsgId = $MsgId.date('YmdHis');
-        $CreDtTm  = $sheet->getCell('C3')->getOldCalculatedValue();// C3: FORMULA: hora de generacion del xml → YYYY-MM-DDTHH:MM:SS
-        $NbOfTxs  = intval($sheet->getCell('C4')->getOldCalculatedValue());// C4: Cantidad de registros
-        $CtrlSum  = $sheet->getCell('C5')->getOldCalculatedValue(); // C5: Suma total
-        $empresa = $sheet->getCell('C6')->getValue();// C6: Nombre de la empresa
-        $nroempresa = $sheet->getCell('F6')->getValue(); // F6: Numero de empresa
+        $empresa = $sheet->getCell('C4')->getValue();// C6: Nombre de la empresa
+        $nroempresa = $sheet->getCell('C5')->getValue(); // F6: Numero de empresa
+
+        //$CreDtTm  = $sheet->getCell('C3')->getOldCalculatedValue();// C3: FORMULA: hora de generacion del xml → YYYY-MM-DDTHH:MM:SS
+        //$NbOfTxs  = intval($sheet->getCell('C4')->getOldCalculatedValue());// C4: Cantidad de registros
+        //$CtrlSum  = $sheet->getCell('C5')->getOldCalculatedValue(); // C5: Suma total
         
-        if(empty($nombrearchivoxml) || empty($MsgId) || empty($CreDtTm) || empty($NbOfTxs) || empty($CtrlSum) || empty($empresa) || empty($nroempresa)){
+        
+        if(empty($nombrearchivoxml) || empty($MsgId) || empty($empresa) || empty($nroempresa)){
            $error++; 
            $msgs[$error] = array("danger","El encabezado posee campos vacíos que son obligatorios");
+        }
+        
+        
+        $NbOfTxs = 0;
+        
+        // Itera a través de las filas para contar cantidad de filas a procesar
+        while ($sheet->cellExists('A' . ($NbOfTxs + 8))) {
+            $cellValue = $sheet->getCell('A' . ($NbOfTxs + 8))->getValue();
+            if (empty($cellValue)) {
+                break; // Si la celda está vacía, termina el bucle
+            }
+            $NbOfTxs++;
         }
         
         //Valido el loop
@@ -190,6 +205,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                   
                   if (substr($coordenadas, 0,1)=="C"){
                       $InstdAmt = $valorCelda;
+                      $CtrlSum = $CtrlSum + floatval($valorCelda);
                   }
                   
                   if (substr($coordenadas, 0,1)=="D"){
@@ -309,8 +325,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
 ?>
 <?php if (!$error):?>  
     <div id="divExito" class="">
-      <h4 class="mb-5">El archivo Excel se ha convertido a XML correctamente.</h4>
-      <h4 class="mb-5">Qué deseas hacer?</h4>
+      <h4 class="mb-3">El archivo Excel se ha convertido a XML correctamente.</h4>
+      <h6 class="mb-3">Se procesaron un total de <?php echo $NbOfTxs;?> registros.</h6>
+      <h6 class="mb-5">El importe total procesado fue de $<?php echo $CtrlSum;?>.</h6>
       <div class="bd-example-snippet bd-code-snippet"><div class="bd-example mb-5 border-0">
         <div class="accordion" id="accordionExample">
           <div class="accordion-item">
@@ -339,10 +356,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
             </div>
           </div>
         </div>
-        </div></div>
-      
+        </div>
+        </div>
+      <h4 class="mb-5">Qué deseas hacer?</h4>
       <div class="d-grid gap-2 mb-3">
-        <a href="<?php echo $nombrearchivoxml; ?>" target="_blank" class="btn btn-success">Descargar Archivo XML</a>
+        <a href="<?php echo $nombrearchivoxml; ?>" download target="_blank" class="btn btn-success">Descargar Archivo XML</a>
       </div>
       
       <div class="d-grid gap-2 mb-5">
