@@ -41,6 +41,7 @@
       }
     }
   </script>
+  <br/>
 <?php include 'blocks/footer.php'?>
 
 
