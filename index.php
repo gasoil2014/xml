@@ -41,11 +41,6 @@
       }
     }
   </script>
-<<<<<<< HEAD
-  <br/>
-=======
-//prueba commit github
->>>>>>> branch 'master' of https://github.com/gasoil2014/xml
 <?php include 'blocks/footer.php'?>
 
 
