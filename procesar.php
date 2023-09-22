@@ -207,9 +207,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
             
             // Crear un objeto SimpleXMLElement para generar el XML
             $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><Document></Document>');
-            $xml->addAttribute('xmlns', 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03');
-            $xml->addAttribute('xsi', 'http://www.w3.org/2001/XMLSchema-instance');
             
+            // Agregar los atributos xmlns y xmlns:xsi al elemento raíz
+            $xml->addAttribute('xmlns', 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03');
+            $xml->addAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance', 'http://www.w3.org/2000/xmlns/');
+                        
             // Banco Santander Individual
             if ($banco == 'santander' && $confidencial == 0){
                 // Escribo el encabezado
@@ -362,7 +364,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                 
                 // Escribo la parte PmtInf
                 $xmlPmtInf = $xmlCstmrCdtTrfInitn->addChild('PmtInf');
-                $xmlPmtInf->addChild('PmtInfId', $MsgId);
+                $xmlPmtInf->addChild('PmtInfId', $lid.date('ymdHis'));
                 $xmlPmtInf->addChild('PmtMtd', 'TRF');
                 
                 $xmlPmtTpInf = $xmlPmtInf->addChild('PmtTpInf');
@@ -498,7 +500,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                 $xmlGrpHdr->addChild('MsgId',$MsgId);
                 $xmlGrpHdr->addChild('CreDtTm',$CreDtTm);
                 $xmlGrpHdr->addChild('NbOfTxs',$NbOfTxs);
-                $xmlGrpHdr->addChild('CtrlSum',$CtrlSum);
+                $xmlGrpHdr->addChild('CtrlSum',number_format(floatval($CtrlSum),2, '.', ''));
                 $CtrlSum=0;
                 $xmlInitgPty = $xmlGrpHdr->addChild('InitgPty');
                 $xmlInitgPty->addChild('Nm',$empresa);
@@ -679,7 +681,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                 $xmlGrpHdr->addChild('MsgId',$MsgId);
                 $xmlGrpHdr->addChild('CreDtTm',$CreDtTm);
                 $xmlGrpHdr->addChild('NbOfTxs',$NbOfTxs);
-                $xmlGrpHdr->addChild('CtrlSum',$CtrlSum);
+                $xmlGrpHdr->addChild('CtrlSum',number_format(floatval($CtrlSum),2, '.', ''));
                 $CtrlSum=0;
                 $xmlInitgPty = $xmlGrpHdr->addChild('InitgPty');
                 $xmlInitgPty->addChild('Nm',$empresa);
@@ -734,7 +736,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                     
                     // Escribo la parte PmtInf
                     $xmlPmtInf = $xmlCstmrCdtTrfInitn->addChild('PmtInf');
-                    $xmlPmtInf->addChild('PmtInfId', $MsgId);
+                    $xmlPmtInf->addChild('PmtInfId', $lid.date('ymdHis'));
                     $xmlPmtInf->addChild('PmtMtd', 'TRF');
                     
                     $xmlPmtTpInf = $xmlPmtInf->addChild('PmtTpInf');
@@ -868,8 +870,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
       <h4 class="mb-3">El archivo Excel se ha convertido a XML correctamente.</h4>
       <h6 class="mb-3">Se proceso un archivo para el banco <strong><?php echo ucfirst($banco);?></strong> en formato <strong><?php echo $formato;?></strong></h6>
       <h6 class="mb-3">Se proceso un archivo para la empresa <strong><?php echo $empresa;?></strong> (<strong>LID: <?php echo $lid;?></strong>)</h6>
-      <h6 class="mb-3">Se procesaron un total de <?php echo $NbOfTxs;?> registros</h6>
-      <h6 class="mb-5">El importe total procesado fue de <?php echo $MonId;?> <?php echo $CtrlSum;?></h6>
+      <h6 class="mb-3">Se procesaron un total de <strong><?php echo $NbOfTxs;?> registros</strong></h6>
+      <h6 class="mb-5">El importe total procesado fue de <strong><?php echo $MonId;?> <?php echo $CtrlSum;?></strong></h6>
       <div class="bd-example-snippet bd-code-snippet"><div class="bd-example mb-5 border-0">
         <div class="accordion" id="accordionExample">
           <div class="accordion-item">
