@@ -77,25 +77,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
         $MonId = $sheet->getCell('E3')->getValue(); // E3: Moneda
         $lid = $sheet->getCell('E4')->getValue();// E4: LID
         $formato = $sheet->getCell('E5')->getValue(); // E5: Formato
+        $refpago = $sheet->getCell('G3')->getValue(); // G3: Referencia en pago
 
         
         if(empty($nombrearchivoxml) || empty($MsgId) || empty($empresa) 
-        || empty($nroempresa) || empty($MonId) || empty($lid) || empty($formato)){
+        || empty($nroempresa) || empty($MonId) || empty($lid) || empty($formato) || empty($refpago)){
            $error++; 
            $msgs[] = array("danger","El encabezado posee campos vacíos que son obligatorios");
            if(empty($nombrearchivoxml))$msgs[$error] = array("danger","Falta completar el nombre del archivo a generar");
            if(empty($MsgId))$msgs[$error] = array("danger","Falta completar el MsgId");
            if(empty($empresa))$msgs[$error] = array("danger","Falta completar el nombre de la empresa");
            if(empty($nroempresa))$msgs[$error] = array("danger","Falta completar el numero de la empresa");
-           if(empty($MonId)){
-               $msgs[]= array("danger","Falta completar la informacion sobre moneda");
-           }
-           if(empty($lid)){
-               $msgs[]= array("danger","Falta completar el LID de la empresa");
-           }
-           if(empty($formato)){
-               $msgs[]= array("danger","Falta completar el formato (Confidencial/Individual)");
-           }
+           if(empty($MonId))$msgs[]= array("danger","Falta completar la informacion sobre moneda");
+           if(empty($lid))$msgs[]= array("danger","Falta completar el LID de la empresa");
+           if(empty($formato))$msgs[]= array("danger","Falta completar el formato (Confidencial/Individual)");
+           if(empty($refpago))$msgs[]= array("danger","Falta completar la referencia del pago");
         }
         
         if ($MonId != 'UYU' && $MonId != 'DOL' && $MonId != 'EUR'){
@@ -209,8 +205,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
             $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><Document></Document>');
             
             // Agregar los atributos xmlns y xmlns:xsi al elemento raíz
+            $xml->addAttribute('xsi', 'http://www.w3.org/2001/XMLSchema-instance');
             $xml->addAttribute('xmlns', 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03');
-            $xml->addAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance', 'http://www.w3.org/2000/xmlns/');
                         
             // Banco Santander Individual
             if ($banco == 'santander' && $confidencial == 0){
@@ -655,11 +651,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                     unset($xmlCdtrAcct);
                     
                     $xmlCdtTrfTxInf->addChild('Purp')->addChild('Prtry','00');
+                    $xmlCdtTrfTxInf->addChild('RmtInf')->addChild('Ustrd',$refpago);
                     $xmlRltdRmtInf = $xmlCdtTrfTxInf->addChild('RltdRmtInf');
                     $xmlRltdRmtInf->addChild('RmtLctnMtd','EMAL');
                     $xmlRltdRmtInf->addChild('RmtLctnElctrncAdr');
                     
-                    unset ($xmlRltdRmtInf);
+                    unset($xmlRltdRmtInf);
                     unset($xmlCdtTrfTxInf);
                     unset($xmlPmtInf);
                     
@@ -836,6 +833,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                     unset($xmlCdtrAcct);
                     $xmlCdtTrfTxInf->addChild('InstrForDbtrAgt','/CONFIDENTIAL/');
                     $xmlCdtTrfTxInf->addChild('Purp')->addChild('Prtry','08');
+                    $xmlCdtTrfTxInf->addChild('RmtInf')->addChild('Ustrd',$refpago);
                     unset($xmlCdtTrfTxInf);
                     unset($xmlPmtInf);
                     
