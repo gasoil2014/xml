@@ -41,6 +41,7 @@
       }
     }
   </script>
+//prueba commit github
 <?php include 'blocks/footer.php'?>
 
 
