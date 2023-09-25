@@ -205,11 +205,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
             $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><Document></Document>');
             
             // Agregar los atributos xmlns y xmlns:xsi al elemento raíz
-            $xml->addAttribute('xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+            $xml->addAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance', 'http://www.w3.org/2000/xmlns/');
             $xml->addAttribute('xmlns', 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03');
+            
                         
             // Banco Santander Individual
             if ($banco == 'santander' && $confidencial == 0){
+                
+                $xml = generaSantanderConfidencial($xml);
                 // Escribo el encabezado
                 $xmlCstmrCdtTrfInitn = $xml->addChild('CstmrCdtTrfInitn');
                 $xmlGrpHdr = $xmlCstmrCdtTrfInitn->addChild('GrpHdr');
@@ -886,7 +889,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                 $dom = new DOMDocument();
                 $dom->preserveWhiteSpace = false;
                 $dom->formatOutput = true;
+                                
                 $dom->loadXML($xml->asXML());
+                //$dom->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
                 
                 // Obtener el XML formateado como string
                 $prettyXml = $dom->saveXML();
