@@ -1,4 +1,25 @@
-<?php include 'blocks/header.php'?>
+<?php
+class ExtendedDOMElement extends DOMElement {
+    /**
+     * Añade un hijo al elemento DOM actual.
+     *
+     * @param string $name El nombre del elemento hijo.
+     * @param ?string $value El valor del elemento hijo, si lo hay.
+     * @return DOMElement El elemento hijo recién creado.
+     */
+    public function addChild(string $name, ?string $value = null): DOMElement {
+        // Verificar si el valor es null para evitar advertencias
+        if ($value !== null) {
+            $child = $this->ownerDocument->createElement($name, $value);
+        } else {
+            $child = $this->ownerDocument->createElement($name);
+        }
+        $this->appendChild($child);
+        return $child;
+    }
+}
+
+include 'blocks/header.php'?>
 <?php $banco = $_POST['radios'];?>
   <script>
     function manejarCheckbox(checkboxId) {
@@ -39,7 +60,8 @@
       </div>  
       
 <?php
-require 'assets/PHPExcel/PHPExcel.php';
+require 'vendor/autoload.php';
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 // Defino las variables para utilizar luego
 $nombrearchivoxml = ''; //C2: Nombre de archivo xml
@@ -65,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
     
 
         // Crear un objeto PHPExcel para cargar el archivo Excel
-        $excel = PHPExcel_IOFactory::load($rutaArchivo);
+        $excel = IOFactory::load($rutaArchivo);
         $sheet = $excel->getActiveSheet();
         
         // Valido que los registros cabecera estén correctos
@@ -113,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
         }
         
         // TO DO Tomar el directorio ('/archive') del config
-        $nombrearchivoxml = 'archive/'.$nombrearchivoxml;
+        $nombrearchivoxml = 'archive/'.$nombrearchivoxml.'.xml';
         $MsgId = $MsgId.date('YmdHis');
         $NbOfTxs = 0;
         
@@ -202,17 +224,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
             echo "<script>$(document).ready(function() {manejarCheckbox('checkValidando');});</script>";
             
             // Crear un objeto SimpleXMLElement para generar el XML
-            $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><Document></Document>');
+            $dom = new DOMDocument('1.0', 'UTF-8');
+            $dom->registerNodeClass('DOMElement', 'ExtendedDOMElement');
             
+            // Ahora, cuando crees un elemento, será una instancia de ExtendedDOMElement
+            $xml = $dom->createElement('Document');
+
             // Agregar los atributos xmlns y xmlns:xsi al elemento raíz
-            $xml->addAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance', 'http://www.w3.org/2000/xmlns/');
-            $xml->addAttribute('xmlns', 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03');
+            $xml->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+            $xml->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03');
+            $dom->appendChild($xml);
             
-                        
             // Banco Santander Individual
             if ($banco == 'santander' && $confidencial == 0){
                 
-                $xml = generaSantanderConfidencial($xml);
                 // Escribo el encabezado
                 $xmlCstmrCdtTrfInitn = $xml->addChild('CstmrCdtTrfInitn');
                 $xmlGrpHdr = $xmlCstmrCdtTrfInitn->addChild('GrpHdr');
@@ -311,7 +336,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                     $xmlAmt = $xmlCdtTrfTxInf->addChild('Amt');
                     
                     $xmlInstdAmt = $xmlAmt->addChild('InstdAmt',number_format(floatval($InstdAmt),2, '.', ''));
-                    $xmlInstdAmt->addAttribute('Ccy',$MonId);
+                    $xmlInstdAmt->setAttribute('Ccy',$MonId);
                     
                     unset($xmlInstdAmt);
                     unset($xmlAmt);
@@ -447,7 +472,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                     $xmlAmt = $xmlCdtTrfTxInf->addChild('Amt');
                     
                     $xmlInstdAmt = $xmlAmt->addChild('InstdAmt',number_format(floatval($InstdAmt),2, '.', ''));
-                    $xmlInstdAmt->addAttribute('Ccy',$MonId);
+                    $xmlInstdAmt->setAttribute('Ccy',$MonId);
                     
                     unset($xmlInstdAmt);
                     unset($xmlAmt);
@@ -589,7 +614,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                     $xmlPstlAdr->addChild('Ctry','UY');
                     
                     unset($xmlPstlAdr);
-                    unset($$xmlFinInstnId);
+                    //unset($$xmlFinInstnId);
                     unset($xmlDbtrAgt);
                     
                     //$xmlPmtInf->addChild('ChrgBr','DEBT');
@@ -603,7 +628,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                     $xmlAmt = $xmlCdtTrfTxInf->addChild('Amt');
                     
                     $xmlInstdAmt = $xmlAmt->addChild('InstdAmt',number_format(floatval($InstdAmt),2, '.', ''));
-                    $xmlInstdAmt->addAttribute('Ccy',$MonId);
+                    $xmlInstdAmt->setAttribute('Ccy',$MonId);
                     
                     unset($xmlInstdAmt);
                     unset($xmlAmt);
@@ -771,7 +796,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                     $xmlPstlAdr->addChild('Ctry','UY');
                     
                     unset($xmlPstlAdr);
-                    unset($$xmlFinInstnId);
+                    //unset($$xmlFinInstnId);
                     unset($xmlDbtrAgt);
                     
                     //$xmlPmtInf->addChild('ChrgBr','DEBT');
@@ -785,7 +810,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                     $xmlAmt = $xmlCdtTrfTxInf->addChild('Amt');
                     
                     $xmlInstdAmt = $xmlAmt->addChild('InstdAmt',number_format(floatval($InstdAmt),2, '.', ''));
-                    $xmlInstdAmt->addAttribute('Ccy',$MonId);
+                    $xmlInstdAmt->setAttribute('Ccy',$MonId);
                     
                     unset($xmlInstdAmt);
                     unset($xmlAmt);
@@ -848,7 +873,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
             
             // Generar el archivo XML
             if (!empty($xml)){
-                file_put_contents($nombrearchivoxml, $xml->asXML());
+                file_put_contents($nombrearchivoxml, $dom->saveXML($xml));
                 echo "<script>$(document).ready(function() {manejarCheckbox('checkGenerando');});</script>";
             }else{
                 $error++;
@@ -886,17 +911,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
                 <pre>
                 <?php 
                 // Crear un objeto DOMDocument
-                $dom = new DOMDocument();
+                //$dom = new DOMDocument();
                 $dom->preserveWhiteSpace = false;
                 $dom->formatOutput = true;
                                 
-                $dom->loadXML($xml->asXML());
                 //$dom->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
                 
                 // Obtener el XML formateado como string
                 $prettyXml = $dom->saveXML();
                 
-                echo highlight_string($prettyXml); ?>
+                echo highlight_string($prettyXml,true); ?>
                 </pre>
               </div>
             </div>
@@ -945,5 +969,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !$error) {
     print '</div>';
     print '<br>';
  }
+ 
+ 
+ 
 ?>
 <?php include 'blocks/footer.php'?>
