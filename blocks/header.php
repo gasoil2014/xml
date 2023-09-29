@@ -3,7 +3,7 @@
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Generador de XML Bancos</title>
+      <title>Generador de XML</title>
 	  <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
 	  <link type="image/x-icon" href="assets/img/favicon.ico" rel="shortcut icon">
       <link href="assets/css/headers.css" rel="stylesheet">
@@ -208,5 +208,5 @@
               </header>
          </main>
          <div class="b-example-divider"></div>
-        <div class="container mt-5 mb-5 mx-auto" style="width: 800px;">
-        	<h2 class="text-center mb-5">Generador de XML Bancos</h2>
+        <div class="container mt-5 mb-5 mx-auto" style="width: 85%;">
+        	<h2 class="text-center mb-5">Generador de XML</h2>
