@@ -981,6 +981,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
             $lid = $sheet->getCell('C3')->getValue(); // C3: LID
             $fechaDesde = $sheet->getCell('C4')->getValue(); // C4: Fecha desde
             $fechaHasta = $sheet->getCell('C5')->getValue(); // C5: Fecha hasta
+            $liqDesde = $sheet->getCell('C5')->getValue(); // C5: Fecha hasta
             $postingDate = $sheet->getCell('C8')->getValue(); // C8: Posting Date
             $empresa = $sheet->getCell('E3')->getValue(); // E3: Nombre de la empresa
             $codEmpresa = $sheet->getCell('E4')->getValue(); // E4: Codigo de empresa
@@ -1068,13 +1069,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
             $celdaanterior='';
             while ($sheet->cellExists('G' . ($NbOfTxs + $comienzoIteracion))) {
                 $cellValue = $sheet->getCell('G' . ($NbOfTxs + $comienzoIteracion))->getValue();
-                            
+                $cellModValue = $sheet->getCell('F' . ($NbOfTxs + $comienzoIteracion))->getValue();            
+                $cellDocTypeValue = $sheet->getCell('F' . ($NbOfTxs + $comienzoIteracion))->getValue();            
+                
                 if (empty($cellValue)) {
                     break; // Si la celda está vacía, termina el bucle
                 }
                 // cada vez que haya un valor nuevo, lo agrego al array
                 if($cellValue!=$celdaanterior){
-                    array_push($documentsTitles, array($cellValue,$NbOfTxs));
+                    array_push($documentsTitles, array($cellValue,$NbOfTxs,$cellModValue,$cellDocTypeValue));
                     //array_push($documentsTitles, $NbOfTxs);
                 }
                 $celdaanterior=$cellValue;
@@ -1083,7 +1086,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 
             // Valido el loop
             foreach ($sheet->getRowIterator($comienzoIteracion, $comienzoIteracion + $NbOfTxs - 1) as $row) {
-
                 foreach ($row->getCellIterator() as $cell) {
                     $valorCelda = $cell->getValue();
                     $coordenadas = $cell->getCoordinate();
@@ -1151,14 +1153,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                             );
                         }
                     }
-                    // celda F debe ser "M"+Numero
+                    // celda F deben ser string
                     if (substr($coordenadas, 0, 1) == "F") {
-                        $numero = (int)substr($valorCelda, 1, 2);
-                        if(substr($valorCelda, 0, 1) != "M" || !$numero){
+                        if ($tipoCelda != "s") {
                             $error ++;
                             $msgs[] = array(
                                 "danger",
-                                "La celda '" . $coordenadas . "' debe tener el formato 'M' + Numero. Ej: 'M1'"
+                                "La celda '" . $coordenadas . "' debe ser de tipo string"
                             );
                         }
                     }
@@ -1182,24 +1183,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                             );
                         }
                     }
-                    //celdas I deben ser numericas de 7 caracteres
+                    //celdas I deben ser numericas de 10 caracteres max
                     if (substr($coordenadas, 0, 1) == "I") {
-                        if ($tipoCelda != "n") {
-                            $error ++;
-                            $msgs[] = array(
-                                "danger",
-                                "La celda '" . $coordenadas . "' debe ser de tipo numerico"
-                            );
-                        }
-                        if(strlen($valorCelda) != 7){
-                            $error ++;
-                            $msgs[] = array(
-                                "danger",
-                                "La celda '" . $coordenadas . "' debe tener 7 caracteres"
-                            );
+                        if($valorCelda != ''){ //puede estar vacia
+                            if ($tipoCelda != "n") {
+                                $error ++;
+                                $msgs[] = array(
+                                    "danger",
+                                    "La celda '" . $coordenadas . "' debe ser de tipo numerico"
+                                );
+                            }
+                            if(strlen($valorCelda) > 10){
+                                $error ++;
+                                $msgs[] = array(
+                                    "danger",
+                                    "La celda '" . $coordenadas . "' debe tener 10 caracteres maximo"
+                                );
+                            }
                         }
                     }
-                    //celdas J deben ser numericas de 7 caracteres
+                    //celdas J deben ser numericas de 10 caracteres max
                     if (substr($coordenadas, 0, 1) == "J") {
                         if($valorCelda != ''){ //puede estar vacia
                             if ($tipoCelda != "n") {
@@ -1209,11 +1212,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                                     "La celda '" . $coordenadas . "' debe ser de tipo numerico"
                                 );
                             }
-                            if(strlen($valorCelda) != 8){
+                            if(strlen($valorCelda) > 10){
                                 $error ++;
                                 $msgs[] = array(
                                     "danger",
-                                    "La celda '" . $coordenadas . "' debe tener 8 caracteres"
+                                    "La celda '" . $coordenadas . "' debe tener 10 caracteres maximo"
                                 );
                             }
                         }
@@ -1284,29 +1287,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
             //for ($i = 0; $i < count($documentsTitles); $i++) {
             if (! $error) {
                 echo "<script>$(document).ready(function() {manejarCheckbox('checkValidando');});</script>";
-                // Proceso un archivo por cada iteracions
-                foreach ($documentsTitles as $document) {
+                // Proceso un archivo por cada iteracion
+                $ultimoDocType = $documentsTitles[0][0];
+                foreach ($documentsTitles as $i=>$document) {
                     $nombrearchivoxml = $document[0];
-                    $filainicio = $document[1];
-    
+                    $filainicio = $document[1] + $comienzoIteracion;
+                    if($i+1 < count($documentsTitles )){ //verifico si hay algun dato mas antes de asignar
+                        $filafinal = $documentsTitles[$i+1][1] + $comienzoIteracion;
+                    }
                     // Genero el xml
-    
-                        // Crear un objeto SimpleXMLElement para generar el XML
-                        $dom = new DOMDocument('1.0', 'UTF-8');
-                        $dom->registerNodeClass('DOMElement', 'ExtendedDOMElement');
-    
-                        // Ahora, cuando crees un elemento, será una instancia de ExtendedDOMElement
-                        $xml = $dom->createElement('Document');
-    
-                        // Agregar los atributos xmlns y xmlns:xsi al elemento raíz
-                        $xml->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-                        $xml->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03');
-                        $dom->appendChild($xml);
-    
+                    // Crear un objeto SimpleXMLElement para generar el XML
+                    $dom = new DOMDocument('1.0', 'UTF-8');
+                    $dom->registerNodeClass('DOMElement', 'ExtendedDOMElement');
+                    
+                    $xml = $dom->createElement('tns:SalaryDocument');
+                                        
+                    // Agregar los atributos 
+                    $xml->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:tns', 'urn:upm.com:global:finance:accounting:postings');
+                    $xml->setAttributeNS('', 'creationTime', $CreDtTm);
+                    $xml->setAttributeNS('', 'sender', 'ADPPayroll.UY');
+                    $xml->setAttributeNS('', 'recipient', 'UPM');
+                    $xml->setAttributeNS('', 'transmissionId', $empresa.'-'.$MonId.'-'.$LiqId.$CreDtTm);
+                    $dom->appendChild($xml);
+                    
+                    $header = $xml->addChild('header');
+                    $header->addChild('CompanyCode' , $codEmpresa);
+                    $header->addChild('DocumentCurrency' , $MonId);
+                    $header->addChild('DocumentTitle' , $nombrearchivoxml.' '.$fechaDesde);//ver formato de fecha!!!
+                    $header->addChild('PostingDate' , $postingDate);//ver formato de fecha!!!
+                    $header->addChild('DocumentDate' , $postingDate);//ver formato de fecha!!!
+                    $header->addChild('ReferenceDocument' , $lid.$fechaHasta.'LIQ'.$liqDesde.$document[2]);//ver formato de fecha!!!
+                    $header->addChild('DocumentType' , $document[3]);
+
+                    foreach ($sheet->getRowIterator($filainicio, $filafinal) as $row) {
+                        foreach ($row->getCellIterator() as $cell) {
+                            // $item = $xml->addChild('item');
+                            // $header->addChild('GLAccount' , '');
+                            // $header->addChild('Amount' , '');
+                            // $header->addChild('CostCenter' , '');
+                            // $header->addChild('Assignment' , '');
+                            // $header->addChild('InternalOrder' , '');
+                            // $header->addChild('WBS' , '');
+                            // $header->addChild('Description' , '');
+                        }
+                    }
+
                     file_put_contents('archive/'.$nombrearchivoxml.'.xml', $dom->saveXML($xml));
                 }
+                echo "<script>$(document).ready(function() {manejarCheckbox('checkProcesando');});</script>";
                 echo "<script>$(document).ready(function() {manejarCheckbox('checkGenerando');});</script>";
-                
             }
         }
     } else {
@@ -1329,7 +1358,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 <div id="divExito" class="">
 	<h4 class="mb-3">El archivo Excel se ha convertido a XML correctamente.</h4>
 	<h6 class="mb-3">
-		Se proceso un archivo para el banco <strong><?php echo ucfirst($proceso);?></strong>
+		Se proceso un archivo <?php if($proceso!='contable'):?>para el banco <?php endif;?><strong><?php echo ucfirst($proceso);?></strong>
 		<?php if ($proceso != 'contable'):?>en formato <strong><?php echo $formato;?></strong><?php endif;?>
 	</h6>
 	<h6 class="mb-3">
