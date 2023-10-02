@@ -208,5 +208,5 @@
               </header>
          </main>
          <div class="b-example-divider"></div>
-        <div class="container mt-5 mb-5 mx-auto" style="width: 85%;">
+        <div class="container mt-5 mb-5 mx-auto" style="width: 800px;">
         	<h2 class="text-center mb-5">Generador de XML</h2>

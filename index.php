@@ -1,10 +1,17 @@
 <?php include 'blocks/header.php'?>
   <form action="procesar.php" method="post" enctype="multipart/form-data">
     <h3 class="mb-3" for="archivoExcel">Paso 1 - Selecciona un archivo de Excel</h3>
-    <div class="w-100 d-flex justify-content-between">    
-        <div class="row align-items-center" style="width: 45%">
-            <div class="col form-group mb-5">
+    <div class="w-100 justify-content-between">    
+        <div class="row align-items-center">
+            <div class="col-md-6 form-group">
                  <legend>Seleccionar banco</legend>
+            </div>
+            <div class="col-md-6 form-group">
+                 <legend>Seleccionar Asiento Contable</legend>
+            </div>
+        </div>
+        <div class="row align-items-center">   
+        	<div class="col-md-6 form-group mb-5">
                  <div class="form-check">
                       <input type="radio" name="radios" class="form-check-input" id="citi" onchange="validarArchivo()" value="citi">
                       <img class="bi me-2" height="25" role="img" aria-label="Bootstrap" src="assets/img/citi.png">
@@ -14,20 +21,19 @@
                       <img class="bi me-2" height="25" role="img" aria-label="Bootstrap" src="assets/img/santander.png">
                  </div>
             </div>
-            <div class="col mb-5">
-            	<a href="assets/dist/EjemploImportacion.xls" target="_blank" class="mx-auto btn btn-success w-100">Descargar Archivo XLS de Ejemplo</a>
-        	</div>
-    	</div>
-    	<div class="row align-items-center" style="width: 45%">
-            <div class="col form-group mb-5">
-                 <legend>Seleccionar Asiento Contable XML SAP</legend>
+            <div class="col-md-6 form-group mb-5">
                  <div class="form-check">
                       <input type="radio" name="radios" class="form-check-input" id="contable" onchange="validarArchivo()" value="contable">
                       <img class="bi me-2" height="50" role="img" aria-label="Bootstrap" src="assets/img/contable.png">
                  </div>
             </div>
-            <div class="col mb-5">
-            	<a href="assets/dist/EjemploImportacionContable.xls" target="_blank" class="mx-auto btn btn-success w-100">Descargar Archivo XLS de Ejemplo</a>
+        </div>
+        <div class="row align-items-center">         
+            <div class="col-md-6 mb-5">
+            	<a href="assets/dist/EjemploImportacion.xls" target="_blank" class="mx-auto btn btn-success w-100">Descargar Bancos XLS de Ejemplo</a>
+        	</div>
+            <div class="col-md-6 mb-5">
+            	<a href="assets/dist/EjemploImportacionContable.xls" target="_blank" class="mx-auto btn btn-success w-100">Descargar Contable XLS de Ejemplo</a>
         	</div>
     	</div>
     </div>
@@ -40,6 +46,7 @@
       </button>
     </div>
   </form>
+  <br/>
   
   <script>
     function validarArchivo() {

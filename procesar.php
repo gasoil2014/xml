@@ -971,6 +971,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
             //PROCESO CONTABLE
             $nombreArchivo = $_FILES["archivoExcel"]["name"];
             $rutaArchivo = $_FILES["archivoExcel"]["tmp_name"];
+            $comienzoIteracion = 11;
             
             // Crear un objeto PHPExcel para cargar el archivo Excel
             $excel = IOFactory::load($rutaArchivo);
@@ -1064,21 +1065,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
             
 
             // Itera a través de las filas para contar cantidad de filas a procesar
-            while ($sheet->cellExists('G' . ($NbOfTxs + 11))) {
-                $cellValue = $sheet->getCell('G' . ($NbOfTxs + 11))->getValue();
+            $celdaanterior='';
+            while ($sheet->cellExists('G' . ($NbOfTxs + $comienzoIteracion))) {
+                $cellValue = $sheet->getCell('G' . ($NbOfTxs + $comienzoIteracion))->getValue();
+                            
                 if (empty($cellValue)) {
                     break; // Si la celda está vacía, termina el bucle
                 }
                 // cada vez que haya un valor nuevo, lo agrego al array
-                if(!in_array($cellValue, $documentsTitles)){
-                    array_push($documentsTitles, $cellValue);
-                    array_push($documentsTitles, $NbOfTxs);
+                if($cellValue!=$celdaanterior){
+                    array_push($documentsTitles, array($cellValue,$NbOfTxs));
+                    //array_push($documentsTitles, $NbOfTxs);
                 }
+                $celdaanterior=$cellValue;
                 $NbOfTxs ++;
             }
 
             // Valido el loop
-            foreach ($sheet->getRowIterator(11, 11 + $NbOfTxs - 1) as $row) {
+            foreach ($sheet->getRowIterator($comienzoIteracion, $comienzoIteracion + $NbOfTxs - 1) as $row) {
 
                 foreach ($row->getCellIterator() as $cell) {
                     $valorCelda = $cell->getValue();
@@ -1272,42 +1276,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                             );
                         } 
                     }
-                }
+                } 
             }
 
             //Proceso para generar varios xml
             // Itero el array generado
-            // for ($i = 0; $i < count($documentsTitles); $i++) {
-            //     if($i % 2 == 0){
-            //         $nombrearchivoxml = $documentsTitles[$i];
-
-            //         // Genero el xml
-            //         if (! $error) {
-            //             echo "<script>$(document).ready(function() {manejarCheckbox('checkValidando');});</script>";
-
-            //             // Crear un objeto SimpleXMLElement para generar el XML
-            //             $dom = new DOMDocument('1.0', 'UTF-8');
-            //             $dom->registerNodeClass('DOMElement', 'ExtendedDOMElement');
-
-            //             // Ahora, cuando crees un elemento, será una instancia de ExtendedDOMElement
-            //             $xml = $dom->createElement('Document');
-
-            //             // Agregar los atributos xmlns y xmlns:xsi al elemento raíz
-            //             $xml->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-            //             $xml->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03');
-            //             $dom->appendChild($xml);
-            //         }
-
-            //         file_put_contents($nombrearchivoxml, $dom->saveXML($xml));
-            //         echo "<script>$(document).ready(function() {manejarCheckbox('checkGenerando');});</script>";
-            //         $dom->preserveWhiteSpace = false;
-            //         $dom->formatOutput = true;
-            //         $prettyXml = $dom->saveXML();
-                    
-            //         echo $nombrearchivoxml;
-            //         echo highlight_string($prettyXml, true);
-            //     }
-            // }
+            //for ($i = 0; $i < count($documentsTitles); $i++) {
+            if (! $error) {
+                echo "<script>$(document).ready(function() {manejarCheckbox('checkValidando');});</script>";
+                // Proceso un archivo por cada iteracions
+                foreach ($documentsTitles as $document) {
+                    $nombrearchivoxml = $document[0];
+                    $filainicio = $document[1];
+    
+                    // Genero el xml
+    
+                        // Crear un objeto SimpleXMLElement para generar el XML
+                        $dom = new DOMDocument('1.0', 'UTF-8');
+                        $dom->registerNodeClass('DOMElement', 'ExtendedDOMElement');
+    
+                        // Ahora, cuando crees un elemento, será una instancia de ExtendedDOMElement
+                        $xml = $dom->createElement('Document');
+    
+                        // Agregar los atributos xmlns y xmlns:xsi al elemento raíz
+                        $xml->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+                        $xml->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'urn:iso:std:iso:20022:tech:xsd:pain.001.001.03');
+                        $dom->appendChild($xml);
+    
+                    file_put_contents('archive/'.$nombrearchivoxml.'.xml', $dom->saveXML($xml));
+                }
+                echo "<script>$(document).ready(function() {manejarCheckbox('checkGenerando');});</script>";
+                
+            }
         }
     } else {
         $error ++;
@@ -1330,7 +1330,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 	<h4 class="mb-3">El archivo Excel se ha convertido a XML correctamente.</h4>
 	<h6 class="mb-3">
 		Se proceso un archivo para el banco <strong><?php echo ucfirst($proceso);?></strong>
-		en formato <strong><?php echo $formato;?></strong>
+		<?php if ($proceso != 'contable'):?>en formato <strong><?php echo $formato;?></strong><?php endif;?>
 	</h6>
 	<h6 class="mb-3">
 		Se proceso un archivo para la empresa <strong><?php echo $empresa;?></strong>
@@ -1339,9 +1339,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 	<h6 class="mb-3">
 		Se procesaron un total de <strong><?php echo $NbOfTxs;?> registros</strong>
 	</h6>
+	<?php if ($proceso != 'contable'):?>
 	<h6 class="mb-5">
 		El importe total procesado fue de <strong><?php echo $MonId;?> <?php echo $CtrlSum;?></strong>
 	</h6>
+	<?php endif;?>
+	<?php if($proceso!='contable'):?>
 	<div class="bd-example-snippet bd-code-snippet">
 		<div class="bd-example mb-5 border-0">
 			<div class="accordion" id="accordionExample">
@@ -1382,6 +1385,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 		<a href="<?php echo $nombrearchivoxml; ?>" download target="_blank"
 			class="btn btn-success">Descargar Archivo XML</a>
 	</div>
+	<?php else:?>
+	<?php foreach($documentsTitles as $k=>$document):?>
+	
+	<div class="bd-example-snippet bd-code-snippet">
+		<div class="bd-example mb-5 border-0">
+			<div class="accordion" id="accordionExample">
+				<div class="accordion-item">
+					<h4 class="accordion-header">
+						<button class="accordion-button collapsed" type="button"
+							data-bs-toggle="collapse" data-bs-target="#collapse<?=$k;?>"
+							aria-expanded="false" aria-controls="collapseOne">
+                <?php echo $document[0]?>.xml
+              </button>
+					</h4>
+					<div id="collapse<?=$k;?>" class="accordion-collapse collapse"
+						data-bs-parent="#accordionExample" style="">
+						<div class="accordion-body">
+							<pre>
+                <?php
+    // Crear un objeto DOMDocument
+    // $dom = new DOMDocument();
+    $dom->preserveWhiteSpace = false;
+    $dom->formatOutput = true;
+
+    // $dom->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+
+    // Obtener el XML formateado como string
+    $prettyXml = $dom->saveXML();
+
+    echo highlight_string($prettyXml, true);
+    ?>
+                </pre>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php endforeach;?>
+	<?php endif;?>
 
 	<div class="d-grid gap-2 mb-5">
 		<a
