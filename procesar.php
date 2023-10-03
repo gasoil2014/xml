@@ -73,6 +73,8 @@ $empresa = ''; // C4: Nombre de la empresa
 $nroempresa = ''; // C5: Numero de empresa
 
 $CreDtTm = date("Y-m-d\TH:i:s"); // Fecha actual en formato → YYYY-MM-DDTHH:MM:SS
+$CreDtTm2 = date("YmdHis"); // Fecha actual en formato → YYYY-MM-DDTHH:MM:SS
+
 
 $CtrlSum = 0; // Suma total
 $error = 0;
@@ -980,10 +982,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 
             // Valido que los registros cabecera estén correctos
             $lid = $sheet->getCell('C3')->getValue(); // C3: LID
-            $fechaDesde = $sheet->getCell('C4')->getValue(); // C4: Fecha desde
-            $fechaHasta = $sheet->getCell('C5')->getValue(); // C5: Fecha hasta
-            $liqDesde = $sheet->getCell('C6')->getValue(); // C5: Fecha hasta
-            $postingDate = $sheet->getCell('C8')->getValue(); // C8: Posting Date
+
+            $dateValue = $sheet->getCell('C4')->getValue();
+            if (is_string($dateValue)) {
+                $error ++;
+                $msgs[] = array(
+                    "danger",
+                    "La Fecha Desde es incorrecta"
+                );
+            } else{
+                $date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($dateValue);
+            }
+            $formattedDate = $date->format('m.y');
+            $fechaDesde = $formattedDate; // C4: Fecha desde
+
+            $dateValue = $sheet->getCell('C5')->getValue();
+            if (is_string($dateValue)) {
+                $error ++;
+                $msgs[] = array(
+                    "danger",
+                    "La Fecha Hasta es incorrecta"
+                );
+            } else{
+                $date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($dateValue);
+            }
+            $formattedDate = $date->format('my');
+            $fechaHasta = $formattedDate; // C5: Fecha hasta
+            
+            $liqDesde = $sheet->getCell('C6')->getValue(); // C6: Liq desde
+
+            $dateValue = $sheet->getCell('C8')->getValue();
+            if (is_string($dateValue)) {
+                $error ++;
+                $msgs[] = array(
+                    "danger",
+                    "Posting Date es incorrecta"
+                );
+            } else{
+                $date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($dateValue);
+            }
+            $formattedDate = $date->format('Y-m-d');
+            $postingDate = $formattedDate; // C8: Posting Date
+
             $empresa = $sheet->getCell('E3')->getValue(); // E3: Nombre de la empresa
             $codEmpresa = $sheet->getCell('E4')->getValue(); // E4: Codigo de empresa
             $MonId = $sheet->getCell('E5')->getValue(); // E5: Moneda
@@ -1058,6 +1098,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                 $msgs[$error] = array(
                     "danger",
                     "El campo LID debe contener 3 caracteres"
+                );
+            }
+            if (strlen($codEmpresa) > 4) {
+                $error ++;
+                $msgs[$error] = array(
+                    "danger",
+                    "El campo F&A Name debe contener 4 caracteres maximo"
                 );
             }
 
@@ -1164,13 +1211,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                             );
                         }
                     }
-                    //celdas G deben ser string
+                    //celdas G deben ser string de 25 caracteres max
                     if (substr($coordenadas, 0, 1) == "G") {
                         if ($tipoCelda != "s") {
                             $error ++;
                             $msgs[] = array(
                                 "danger",
                                 "La celda '" . $coordenadas . "' debe ser de tipo string"
+                            );
+                        }
+                        if(strlen($valorCelda) > 25){
+                            $error ++;
+                            $msgs[] = array(
+                                "danger",
+                                "La celda '" . $coordenadas . "' debe tener 25 caracteres maximo"
                             );
                         }
                     }
@@ -1235,8 +1289,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                             }
                         }
                     }
-                    //celdas L deben ser string
-                    //FALTA VALIDAR EL FORMATO ESPECIFICO DE LA CELDA (A-A111-11)
+                    //celdas L deben ser string de 24 caracteres max
                     if (substr($coordenadas, 0, 1) == "L") {
                         if($valorCelda != ''){ //puede estar vacia
                             if ($tipoCelda != "s"){
@@ -1246,9 +1299,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                                     "La celda '" . $coordenadas . "' debe ser de tipo string"
                                 );
                             }
+                            if(strlen($valorCelda) > 18){
+                                $error ++;
+                                $msgs[] = array(
+                                    "danger",
+                                    "La celda '" . $coordenadas . "' debe tener 18 caracteres maximo"
+                                );
+                            }
                         }
                     }
-                    //celdas M deben ser string
+                    //celdas M deben ser string de 18 caracteres max
                     if (substr($coordenadas, 0, 1) == "M") {
                         if($valorCelda != ''){ //puede estar vacia
                             if ($tipoCelda != "s") {
@@ -1256,6 +1316,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                                 $msgs[] = array(
                                     "danger",
                                     "La celda '" . $coordenadas . "' debe ser de tipo string"
+                                );
+                            }
+                            if(strlen($valorCelda) > 18){
+                                $error ++;
+                                $msgs[] = array(
+                                    "danger",
+                                    "La celda '" . $coordenadas . "' debe tener 18 caracteres maximo"
                                 );
                             }
                         }
@@ -1270,7 +1337,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                             );
                         }
                     }
-                    //celdas O deben ser string
+                    //celdas O deben ser string de 50 caracteres max
                     if (substr($coordenadas, 0, 1) == "O") {
                         if ($tipoCelda != "s") {
                             $error ++;
@@ -1279,6 +1346,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                                 "La celda '" . $coordenadas . "' debe ser de tipo string"
                             );
                         } 
+                        if(strlen($valorCelda) > 50){
+                            $error ++;
+                            $msgs[] = array(
+                                "danger",
+                                "La celda '" . $coordenadas . "' debe tener 50 caracteres maximo"
+                            );
+                        }
                     }
                 } 
             }
@@ -1291,7 +1365,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                 echo "<script>$(document).ready(function() {manejarCheckbox('checkProcesando');});</script>";
                 // Proceso un archivo por cada iteracion
                 foreach ($documentsTitles as $i=>$document) {
-
+                    $documentTitleTag = $documentsTitles[$i][0];//varible para la etiqueta dentro del xml
                     $documentsTitles[$i][0] = $nombrearchivoxml = $document[0].'-'.date('YmdHis');
                     if($i==1) {
                         $filainicio = $comienzoIteracion;
@@ -1311,15 +1385,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                     // Agregar los atributos 
                     $xml->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:tns', 'urn:upm.com:global:finance:accounting:postings');
                     $xml->setAttributeNS('', 'creationTime', $CreDtTm);
-                    $xml->setAttributeNS('', 'sender', 'ADPPayroll.UY');
+                    $xml->setAttributeNS('', 'sender', 'ADPPAYROLL.UY');
                     $xml->setAttributeNS('', 'recipient', 'UPM');
-                    $xml->setAttributeNS('', 'transmissionId', $empresa.'-'.$MonId.'-'.$LiqId.$CreDtTm);
+                    $xml->setAttributeNS('', 'transmissionId', $empresa.'-'.$MonId.'-'.$LiqId.$CreDtTm2);
                     $dom->appendChild($xml);
                     
                     $header = $xml->addChild('header');
                     $header->addChild('CompanyCode' , $codEmpresa);
                     $header->addChild('DocumentCurrency' , $MonId);
-                    $header->addChild('DocumentTitle' , $nombrearchivoxml.' '.$fechaDesde);//ver formato de fecha!!!
+                    $header->addChild('DocumentTitle' , $documentTitleTag.' '.$fechaDesde);//ver formato de fecha!!!
                     $header->addChild('PostingDate' , $postingDate);//ver formato de fecha!!!
                     $header->addChild('DocumentDate' , $postingDate);//ver formato de fecha!!!
                     $header->addChild('ReferenceDocument' , $lid.$fechaHasta.'LIQ'.$liqDesde.$sheet->getCell('F'.($filainicio))->getValue());//ver formato de fecha!!!
@@ -1361,12 +1435,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                         
                         $item = $xml->addChild('item');
                         $item->addChild('GLAccount' , $GLAccount);
-                        $item->addChild('Amount' , $Amount);
+                        $item->addChild('Amount' , number_format(floatval($Amount), 2, '.', ''));
                         $item->addChild('CostCenter' , $CostCenter);
                         $item->addChild('Assignment' , $Assignment);
                         $item->addChild('InternalOrder' , $InternalOrder);
                         $item->addChild('WBS' , $WBS);
-                        $item->addChild('Description' , $Description);
+                        $item->addChild('Description' , $fechaDesde.'-'.$Description);
                     }
                     
                     file_put_contents('archive/'.$nombrearchivoxml.'.xml', $dom->saveXML($xml));
