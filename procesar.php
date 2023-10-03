@@ -969,6 +969,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
             //----------------------------------------------------------------------------------
         } else {
             //PROCESO CONTABLE
+            echo "<script>$(document).ready(function() {manejarCheckbox('checkValidando');});</script>";
             $nombreArchivo = $_FILES["archivoExcel"]["name"];
             $rutaArchivo = $_FILES["archivoExcel"]["tmp_name"];
             $comienzoIteracion = 11;
@@ -981,7 +982,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
             $lid = $sheet->getCell('C3')->getValue(); // C3: LID
             $fechaDesde = $sheet->getCell('C4')->getValue(); // C4: Fecha desde
             $fechaHasta = $sheet->getCell('C5')->getValue(); // C5: Fecha hasta
-            $liqDesde = $sheet->getCell('C5')->getValue(); // C5: Fecha hasta
+            $liqDesde = $sheet->getCell('C6')->getValue(); // C5: Fecha hasta
             $postingDate = $sheet->getCell('C8')->getValue(); // C8: Posting Date
             $empresa = $sheet->getCell('E3')->getValue(); // E3: Nombre de la empresa
             $codEmpresa = $sheet->getCell('E4')->getValue(); // E4: Codigo de empresa
@@ -1063,26 +1064,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 
             $NbOfTxs = 0;
             $documentsTitles = []; //array para guardar los archivos a generar y las filas donde empiezan
-            
 
             // Itera a través de las filas para contar cantidad de filas a procesar
-            $celdaanterior='';
+            $celdaanterior = $sheet->getCell('G' . ($NbOfTxs + $comienzoIteracion))->getValue();
+            $i=1;
+            
             while ($sheet->cellExists('G' . ($NbOfTxs + $comienzoIteracion))) {
                 $cellValue = $sheet->getCell('G' . ($NbOfTxs + $comienzoIteracion))->getValue();
-                $cellModValue = $sheet->getCell('F' . ($NbOfTxs + $comienzoIteracion))->getValue();            
-                $cellDocTypeValue = $sheet->getCell('F' . ($NbOfTxs + $comienzoIteracion))->getValue();            
                 
-                if (empty($cellValue)) {
-                    break; // Si la celda está vacía, termina el bucle
-                }
                 // cada vez que haya un valor nuevo, lo agrego al array
                 if($cellValue!=$celdaanterior){
-                    array_push($documentsTitles, array($cellValue,$NbOfTxs,$cellModValue,$cellDocTypeValue));
-                    //array_push($documentsTitles, $NbOfTxs);
+                    $documentsTitles[$i] =  array($celdaanterior,$NbOfTxs);
+                    $i++;
                 }
+                
                 $celdaanterior=$cellValue;
                 $NbOfTxs ++;
             }
+            
+            // Agrego ultimo registro al array
+            $documentsTitles[$i] =  array($celdaanterior,$NbOfTxs);
 
             // Valido el loop
             foreach ($sheet->getRowIterator($comienzoIteracion, $comienzoIteracion + $NbOfTxs - 1) as $row) {
@@ -1286,15 +1287,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
             // Itero el array generado
             //for ($i = 0; $i < count($documentsTitles); $i++) {
             if (! $error) {
-                echo "<script>$(document).ready(function() {manejarCheckbox('checkValidando');});</script>";
+                
+                echo "<script>$(document).ready(function() {manejarCheckbox('checkProcesando');});</script>";
                 // Proceso un archivo por cada iteracion
-                $ultimoDocType = $documentsTitles[0][0];
                 foreach ($documentsTitles as $i=>$document) {
-                    $nombrearchivoxml = $document[0];
-                    $filainicio = $document[1] + $comienzoIteracion;
-                    if($i+1 < count($documentsTitles )){ //verifico si hay algun dato mas antes de asignar
-                        $filafinal = $documentsTitles[$i+1][1] + $comienzoIteracion;
+
+                    $documentsTitles[$i][0] = $nombrearchivoxml = $document[0].'-'.date('YmdHis');
+                    if($i==1) {
+                        $filainicio = $comienzoIteracion;
+                        
+                    }else{
+                        $filainicio = $comienzoIteracion + $documentsTitles[$i-1][1];
                     }
+                    $filafinal = $comienzoIteracion + $document[1]-1;
+                    
                     // Genero el xml
                     // Crear un objeto SimpleXMLElement para generar el XML
                     $dom = new DOMDocument('1.0', 'UTF-8');
@@ -1316,25 +1322,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                     $header->addChild('DocumentTitle' , $nombrearchivoxml.' '.$fechaDesde);//ver formato de fecha!!!
                     $header->addChild('PostingDate' , $postingDate);//ver formato de fecha!!!
                     $header->addChild('DocumentDate' , $postingDate);//ver formato de fecha!!!
-                    $header->addChild('ReferenceDocument' , $lid.$fechaHasta.'LIQ'.$liqDesde.$document[2]);//ver formato de fecha!!!
-                    $header->addChild('DocumentType' , $document[3]);
+                    $header->addChild('ReferenceDocument' , $lid.$fechaHasta.'LIQ'.$liqDesde.$sheet->getCell('F'.($filainicio))->getValue());//ver formato de fecha!!!
+                    $header->addChild('DocumentType' , $sheet->getCell('H'.($filainicio))->getValue());
 
                     foreach ($sheet->getRowIterator($filainicio, $filafinal) as $row) {
                         foreach ($row->getCellIterator() as $cell) {
-                            // $item = $xml->addChild('item');
-                            // $header->addChild('GLAccount' , '');
-                            // $header->addChild('Amount' , '');
-                            // $header->addChild('CostCenter' , '');
-                            // $header->addChild('Assignment' , '');
-                            // $header->addChild('InternalOrder' , '');
-                            // $header->addChild('WBS' , '');
-                            // $header->addChild('Description' , '');
+                            $valorCelda = $cell->getValue();
+                            $coordenadas = $cell->getCoordinate();
+                            
+                            if (substr($coordenadas, 0, 1) == "I") {
+                                $GLAccount = $valorCelda;
+                            }
+                            
+                            if (substr($coordenadas, 0, 1) == "N") {
+                                $Amount = $valorCelda;
+                            }
+                            
+                            if (substr($coordenadas, 0, 1) == "J") {
+                                $CostCenter = $valorCelda;
+                            }
+                            
+                            if (substr($coordenadas, 0, 1) == "M") {
+                                $Assignment = $valorCelda;
+                            }
+                            
+                            if (substr($coordenadas, 0, 1) == "K") {
+                                $InternalOrder = $valorCelda;
+                            }
+                            
+                            if (substr($coordenadas, 0, 1) == "L") {
+                                $WBS = $valorCelda;
+                            }
+                            
+                            if (substr($coordenadas, 0, 1) == "O") {
+                                $Description = $valorCelda;
+                            }
                         }
+                        
+                        $item = $xml->addChild('item');
+                        $item->addChild('GLAccount' , $GLAccount);
+                        $item->addChild('Amount' , $Amount);
+                        $item->addChild('CostCenter' , $CostCenter);
+                        $item->addChild('Assignment' , $Assignment);
+                        $item->addChild('InternalOrder' , $InternalOrder);
+                        $item->addChild('WBS' , $WBS);
+                        $item->addChild('Description' , $Description);
                     }
-
+                    
                     file_put_contents('archive/'.$nombrearchivoxml.'.xml', $dom->saveXML($xml));
                 }
-                echo "<script>$(document).ready(function() {manejarCheckbox('checkProcesando');});</script>";
                 echo "<script>$(document).ready(function() {manejarCheckbox('checkGenerando');});</script>";
             }
         }
@@ -1372,6 +1408,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 	<h6 class="mb-5">
 		El importe total procesado fue de <strong><?php echo $MonId;?> <?php echo $CtrlSum;?></strong>
 	</h6>
+	<?php else:?>
+	<h6 class="mb-5">
+		Se generaron un total de <strong><?php echo count($documentsTitles);?> archivos</strong>
+	</h6>
 	<?php endif;?>
 	<?php if($proceso!='contable'):?>
 	<div class="bd-example-snippet bd-code-snippet">
@@ -1389,7 +1429,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 						data-bs-parent="#accordionExample" style="">
 						<div class="accordion-body">
 							<pre>
-                <?php
+    <?php
     // Crear un objeto DOMDocument
     // $dom = new DOMDocument();
     $dom->preserveWhiteSpace = false;
@@ -1418,7 +1458,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 	<?php foreach($documentsTitles as $k=>$document):?>
 	
 	<div class="bd-example-snippet bd-code-snippet">
-		<div class="bd-example mb-5 border-0">
+		<div class="bd-example mb-3 border-0">
 			<div class="accordion" id="accordionExample">
 				<div class="accordion-item">
 					<h4 class="accordion-header">
@@ -1432,15 +1472,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 						data-bs-parent="#accordionExample" style="">
 						<div class="accordion-body">
 							<pre>
-                <?php
-    // Crear un objeto DOMDocument
-    // $dom = new DOMDocument();
+    <?php
+    // Obtener el contenido del archivo XML como una cadena
+    $xmlContent = file_get_contents('archive/'.$document[0].'.xml');
+    
+    // Crear un nuevo objeto DOMDocument
+    $dom = new DOMDocument();
     $dom->preserveWhiteSpace = false;
     $dom->formatOutput = true;
-
-    // $dom->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-
-    // Obtener el XML formateado como string
+    
+    
+    // Cargar la cadena en el objeto DOMDocument
+    $dom->loadXML($xmlContent);
+    
+    // Si deseas obtener el XML formateado como string
     $prettyXml = $dom->saveXML();
 
     echo highlight_string($prettyXml, true);
@@ -1451,6 +1496,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 				</div>
 			</div>
 		</div>
+	</div>
+	<?php endforeach;?>
+	
+	<h4 class="mb-5">Qué deseas hacer?</h4>
+	
+	<?php foreach($documentsTitles as $k=>$document):?>
+		
+	<div class="d-grid gap-2 mb-3">
+		<a href="archive/<?php echo $document[0]; ?>.xml" download target="_blank"
+			class="btn btn-success">Descargar Archivo XML<br/><?php echo $document[0] ?>.xml}
+		</a>
 	</div>
 	<?php endforeach;?>
 	<?php endif;?>
