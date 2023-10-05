@@ -39,6 +39,7 @@
     </div>
     <div class="form-group mb-5">
       <input type="file" class="form-control form-control-lg" id="archivoExcel" name="archivoExcel" onchange="validarArchivo()" accept=".xls, .xlsx">
+      <p class="fw-lighter fst-italic">Tamaño máximo permitido: <span id="maxSize"><?php echo ini_get('upload_max_filesize'); ?></span></p>
     </div>
     <div class="d-grid gap-2 mb-5">
       <button type="submit" class="btn btn-primary" id="botonConvertir" disabled>Convertir

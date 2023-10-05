@@ -1450,10 +1450,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
         }
     } else {
         $error ++;
-        $msgs[] = array(
-            "danger",
-            "No se encontró el archivo para procesar"
-        );
+        $errorCode = $_FILES["archivoExcel"]["error"];
+        $errorMessage = "";
+        
+        switch ($errorCode) {
+            case UPLOAD_ERR_OK:
+                $errorMessage = "No hay error, el archivo se subió con éxito.";
+                break;
+            case UPLOAD_ERR_INI_SIZE:
+                $errorMessage = "El archivo subido excede el tamaño máximo permitido: ".ini_get('upload_max_filesize').".";
+                break;
+            case UPLOAD_ERR_FORM_SIZE:
+                $errorMessage = "El archivo subido excede la directiva MAX_FILE_SIZE que fue especificada en el formulario HTML.";
+                break;
+            case UPLOAD_ERR_PARTIAL:
+                $errorMessage = "El archivo subido fue sólo parcialmente subido.";
+                break;
+            case UPLOAD_ERR_NO_FILE:
+                $errorMessage = "Ningún archivo fue subido.";
+                break;
+            case UPLOAD_ERR_NO_TMP_DIR:
+                $errorMessage = "Falta una carpeta temporal.";
+                break;
+            case UPLOAD_ERR_CANT_WRITE:
+                $errorMessage = "Falló al escribir el archivo en el disco.";
+                break;
+            case UPLOAD_ERR_EXTENSION:
+                $errorMessage = "Una extensión de PHP detuvo la subida del archivo.";
+                break;
+            default:
+                $errorMessage = "Error desconocido al subir el archivo.";
+        }
+        
+        // Ahora puedes usar la variable $errorMessage donde la necesites.
+        $msgs[] = array("danger",$errorMessage);
     }
 } else {
     $error ++;
