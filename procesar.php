@@ -340,7 +340,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                             }
 
                             if (substr($coordenadas, 0, 1) == "B") {
-                                $EndToEndId = $valorCelda . date('YmdHis');
+                                $EndToEndId = $valorCelda;
                                 ;
                             }
 
@@ -512,7 +512,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                             $coordenadas = $cell->getCoordinate();
 
                             if (substr($coordenadas, 0, 1) == "B") {
-                                $EndToEndId = $valorCelda . date('YmdHis');
+                                $EndToEndId = $valorCelda;
                                 ;
                             }
 
@@ -624,7 +624,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                             }
 
                             if (substr($coordenadas, 0, 1) == "B") {
-                                $EndToEndId = $valorCelda . date('YmdHis');
+                                $EndToEndId = $valorCelda;
                                 ;
                             }
 
@@ -809,7 +809,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                             }
 
                             if (substr($coordenadas, 0, 1) == "B") {
-                                $EndToEndId = $valorCelda . date('YmdHis');
+                                $EndToEndId = $valorCelda;
                                 ;
                             }
 
