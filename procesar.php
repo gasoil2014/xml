@@ -25,9 +25,7 @@ class ExtendedDOMElement extends DOMElement
     }
 }
 
-include 'blocks/header.php';
-include './configuracion.php';
-?>
+include 'blocks/header.php'?>
 <?php $proceso = $_POST['radios'];?>
 <script>
     function manejarCheckbox(checkboxId) {
@@ -187,7 +185,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
             }
 
             // TO DO Tomar el directorio ('/archive') del config
-            $nombrearchivoxml = $directory . $nombrearchivoxml . '.xml';
+            $nombrearchivoxml = 'archive/' . $nombrearchivoxml . '.xml';
             $MsgId = $MsgId . date('YmdHis');
             $NbOfTxs = 0;
 
@@ -976,6 +974,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
             echo "<script>$(document).ready(function() {manejarCheckbox('checkValidando');});</script>";
             $nombreArchivo = $_FILES["archivoExcel"]["name"];
             $rutaArchivo = $_FILES["archivoExcel"]["tmp_name"];
+            $comienzoIteracion = 11;
             
             // Crear un objeto PHPExcel para cargar el archivo Excel
             $excel = IOFactory::load($rutaArchivo);
@@ -1114,11 +1113,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
             $documentsTitles = []; //array para guardar los archivos a generar y las filas donde empiezan
 
             // Itera a través de las filas para contar cantidad de filas a procesar
-            $celdaanterior = $sheet->getCell('G' . ($NbOfTxs + $filaInicial))->getValue();
+            $celdaanterior = $sheet->getCell('G' . ($NbOfTxs + $comienzoIteracion))->getValue();
             $i=1;
             
-            while ($sheet->cellExists('G' . ($NbOfTxs + $filaInicial))) {
-                $cellValue = $sheet->getCell('G' . ($NbOfTxs + $filaInicial))->getValue();
+            while ($sheet->cellExists('G' . ($NbOfTxs + $comienzoIteracion))) {
+                $cellValue = $sheet->getCell('G' . ($NbOfTxs + $comienzoIteracion))->getValue();
                 
                 // cada vez que haya un valor nuevo, lo agrego al array
                 if($cellValue!=$celdaanterior){
@@ -1134,7 +1133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
             $documentsTitles[$i] =  array($celdaanterior,$NbOfTxs);
 
             // Valido el loop
-            foreach ($sheet->getRowIterator($filaInicial, $filaInicial + $NbOfTxs - 1) as $row) {
+            foreach ($sheet->getRowIterator($comienzoIteracion, $comienzoIteracion + $NbOfTxs - 1) as $row) {
                 foreach ($row->getCellIterator() as $cell) {
                     $valorCelda = $cell->getValue();
                     $coordenadas = $cell->getCoordinate();
@@ -1369,12 +1368,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                     $documentTitleTag = $documentsTitles[$i][0];//varible para la etiqueta dentro del xml
                     $documentsTitles[$i][0] = $nombrearchivoxml = $document[0].'-'.date('YmdHis');
                     if($i==1) {
-                        $filainicio = $filaInicial;
+                        $filainicio = $comienzoIteracion;
                         
                     }else{
-                        $filainicio = $filaInicial + $documentsTitles[$i-1][1];
+                        $filainicio = $comienzoIteracion + $documentsTitles[$i-1][1];
                     }
-                    $filafinal = $filaInicial + $document[1]-1;
+                    $filafinal = $comienzoIteracion + $document[1]-1;
                     
                     // Genero el xml
                     // Crear un objeto SimpleXMLElement para generar el XML
@@ -1444,7 +1443,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                         $item->addChild('Description' , $fechaDesde.'-'.$Description);
                     }
                     
-                    file_put_contents($directory.$nombrearchivoxml.'.xml', $dom->saveXML($xml));
+                    file_put_contents('archive/'.$nombrearchivoxml.'.xml', $dom->saveXML($xml));
                 }
                 echo "<script>$(document).ready(function() {manejarCheckbox('checkGenerando');});</script>";
             }
@@ -1527,7 +1526,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 						<button class="accordion-button collapsed" type="button"
 							data-bs-toggle="collapse" data-bs-target="#collapseOne"
 							aria-expanded="false" aria-controls="collapseOne">
-                <?php echo $nombrearchivoxml?>
+                <?php echo $nombrearchivoxml?>.xml
               </button>
 					</h4>
 					<div id="collapseOne" class="accordion-collapse collapse"
@@ -1579,7 +1578,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 							<pre>
     <?php
     // Obtener el contenido del archivo XML como una cadena
-    $xmlContent = file_get_contents($directory.$document[0].'.xml');
+    $xmlContent = file_get_contents('archive/'.$document[0].'.xml');
     
     // Crear un nuevo objeto DOMDocument
     $dom = new DOMDocument();
@@ -1609,13 +1608,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 	<?php foreach($documentsTitles as $k=>$document):?>
 		
 	<div class="d-grid gap-2 mb-3">
-		<a href="<?php echo $directory.$document[0]; ?>.xml" download target="_blank"
+		<a href="archive/<?php echo $document[0]; ?>.xml" download target="_blank"
 			class="btn btn-success">Descargar Archivo XML<br/><?php echo $document[0] ?>.xml}
 		</a>
 	</div>
 	<?php endforeach;?>
 	<?php endif;?>
-
+	<?php if($proceso === "santander"):?>
 	<div class="d-grid gap-2 mb-5">
 		<a
 			href="enviar_por_internet.php?archivo=<?php echo $nombrearchivoxml; ?>"
@@ -1624,7 +1623,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 			<em>* La acción será registrada</em>
 		</p>
 	</div>
-
+	<?php else:?>
+        <div class="d-grid gap-2 mb-5">
+                <a
+                        href="enviar_por_internet.php?archivo=<?php echo $nombrearchivoxml; ?>"
+                        class="btn btn-primary disabled">Enviar por Internet</a>
+                <p>
+                        <em>* La acción será registrada</em>
+                </p>
+        </div>
+	<?php endif;?>
 	<div class="d-grid gap-2 mb-5">
 		<a type="button" href="index.php"
 			class="float-right btn btn-outline-secondary">Volver</a>
