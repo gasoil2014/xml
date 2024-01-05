@@ -1,3 +1,113 @@
+Error: Contable 2024-01-03T10:30:36 -- Archivo: archive/PROVISION SV-20240103103012.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2024-01-03T10:30:34 -- Archivo: archive/PROVISION LICENCIA-20240103103012.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2024-01-03T10:30:30 -- Archivo: archive/PROVISION AGUINALDO-20240103103012.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2024-01-03T10:30:28 -- Archivo: archive/APORTES PATRONALES-20240103103012.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2024-01-03T10:30:26 -- Archivo: archive/SALARIOS-20240103103012.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Proceso: Santander -- Fecha: 2024-01-03T08:18:32 -- Archivo: archive/UPM_SANTANDER_PAYROLL_UY_030124081454.xml
+Respuesta: <?xml version="1.0" encoding="utf-8"?><!-- Approval required --><!-- Processing time: 2 ms --><!-- Validation result: OK/OK --><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03"><CstmrPmtStsRpt><GrpHdr><MsgId>BTM-RSP-1704280712575-P</MsgId><CreDtTm>2024-01-03T11:18:32Z</CreDtTm></GrpHdr><OrgnlGrpInfAndSts><OrgnlMsgId>168CUECAR20240103081821</OrgnlMsgId><OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId><OrgnlNbOfTxs>5</OrgnlNbOfTxs><GrpSts>ACTC</GrpSts></OrgnlGrpInfAndSts></CstmrPmtStsRpt></Document>
+Data: <table class="table text-center"><thead><tr><th scope="col">LID</th><th scope="col">Pagos</th><th scope="col">$ Total</th><th scope="col">Company</th><th scope="col">Message ID</th><th scope="col"                           >Fecha</th></tr></thead><tbody><tr><td>168</td><td>5</td><td>$5,00</td><td>Cuecar S.A.</td><td>168CUECAR</td><td>Jan, 05</td></tr></tbody></table>
+
+Proceso: Santander -- Fecha: 2024-01-03T08:18:13 -- Archivo: archive/UPM_SANTANDER_PAYROLL_UY_030124081145.xml
+Respuesta: <?xml version="1.0" encoding="utf-8"?><!-- Approval required --><!-- Processing time: 2 ms --><!-- Validation result: OK/OK --><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03"><CstmrPmtStsRpt><GrpHdr><MsgId>BTM-RSP-1704280692898-P</MsgId><CreDtTm>2024-01-03T11:18:12Z</CreDtTm></GrpHdr><OrgnlGrpInfAndSts><OrgnlMsgId>167TEBETUR20240103081755</OrgnlMsgId><OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId><OrgnlNbOfTxs>5</OrgnlNbOfTxs><GrpSts>ACTC</GrpSts></OrgnlGrpInfAndSts></CstmrPmtStsRpt></Document>
+Data: <table class="table text-center"><thead><tr><th scope="col">LID</th><th scope="col">Pagos</th><th scope="col">$ Total</th><th scope="col">Company</th><th scope="col">Message ID</th><th scope="col"                           >Fecha</th></tr></thead><tbody><tr><td>167</td><td>5</td><td>$5,00</td><td>Tebetur S.A.</td><td>167TEBETUR</td><td>Jan, 05</td></tr></tbody></table>
+
+Proceso: Santander -- Fecha: 2024-01-03T08:17:46 -- Archivo: archive/UPM_SANTANDER_PAYROLL_UY_030124081100.xml
+Respuesta: <?xml version="1.0" encoding="utf-8"?><!-- Approval required --><!-- Processing time: 1 ms --><!-- Validation result: OK/OK --><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03"><CstmrPmtStsRpt><GrpHdr><MsgId>BTM-RSP-1704280665895-P</MsgId><CreDtTm>2024-01-03T11:17:45Z</CreDtTm></GrpHdr><OrgnlGrpInfAndSts><OrgnlMsgId>166BLANVIRA20240103081739</OrgnlMsgId><OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId><OrgnlNbOfTxs>5</OrgnlNbOfTxs><GrpSts>ACTC</GrpSts></OrgnlGrpInfAndSts></CstmrPmtStsRpt></Document>
+Data: <table class="table text-center"><thead><tr><th scope="col">LID</th><th scope="col">Pagos</th><th scope="col">$ Total</th><th scope="col">Company</th><th scope="col">Message ID</th><th scope="col"                           >Fecha</th></tr></thead><tbody><tr><td>166</td><td>5</td><td>$5,00</td><td>Blanvira S.A.</td><td>166BLANVIRA</td><td>Jan, 05</td></tr></tbody></table>
+
+Proceso: Santander -- Fecha: 2024-01-03T08:17:30 -- Archivo: archive/UPM_SANTANDER_PAYROLL_UY_030124081006.xml
+Respuesta: <?xml version="1.0" encoding="utf-8"?><!-- Approval required --><!-- Processing time: 1 ms --><!-- Validation result: OK/OK --><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03"><CstmrPmtStsRpt><GrpHdr><MsgId>BTM-RSP-1704280650801-P</MsgId><CreDtTm>2024-01-03T11:17:30Z</CreDtTm></GrpHdr><OrgnlGrpInfAndSts><OrgnlMsgId>165BIOFUELS20240103081722</OrgnlMsgId><OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId><OrgnlNbOfTxs>5</OrgnlNbOfTxs><GrpSts>ACTC</GrpSts></OrgnlGrpInfAndSts></CstmrPmtStsRpt></Document>
+Data: <table class="table text-center"><thead><tr><th scope="col">LID</th><th scope="col">Pagos</th><th scope="col">$ Total</th><th scope="col">Company</th><th scope="col">Message ID</th><th scope="col"                           >Fecha</th></tr></thead><tbody><tr><td>165</td><td>5</td><td>$5,00</td><td>UPM Biofuels S.A.</td><td>165BIOFUELS</td><td>Jan, 05</td></tr></tbody></table>
+
+Proceso: Santander -- Fecha: 2024-01-03T08:17:12 -- Archivo: archive/UPM_SANTANDER_PAYROLL_UY_030124080906.xml
+Respuesta: <?xml version="1.0" encoding="utf-8"?><!-- Approval required --><!-- Processing time: 1 ms --><!-- Validation result: OK/OK --><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03"><CstmrPmtStsRpt><GrpHdr><MsgId>BTM-RSP-1704280632386-P</MsgId><CreDtTm>2024-01-03T11:17:12Z</CreDtTm></GrpHdr><OrgnlGrpInfAndSts><OrgnlMsgId>164URUWOOD20240103081706</OrgnlMsgId><OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId><OrgnlNbOfTxs>5</OrgnlNbOfTxs><GrpSts>ACTC</GrpSts></OrgnlGrpInfAndSts></CstmrPmtStsRpt></Document>
+Data: <table class="table text-center"><thead><tr><th scope="col">LID</th><th scope="col">Pagos</th><th scope="col">$ Total</th><th scope="col">Company</th><th scope="col">Message ID</th><th scope="col"                           >Fecha</th></tr></thead><tbody><tr><td>164</td><td>5</td><td>$5,00</td><td>Uruwood S.A. </td><td>164URUWOOD</td><td>Jan, 05</td></tr></tbody></table>
+
+Proceso: Santander -- Fecha: 2024-01-03T08:16:55 -- Archivo: archive/UPM_SANTANDER_PAYROLL_UY_030124080720.xml
+Respuesta: <?xml version="1.0" encoding="utf-8"?><!-- Approval required --><!-- Processing time: 1 ms --><!-- Validation result: OK/OK --><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03"><CstmrPmtStsRpt><GrpHdr><MsgId>BTM-RSP-1704280615838-P</MsgId><CreDtTm>2024-01-03T11:16:55Z</CreDtTm></GrpHdr><OrgnlGrpInfAndSts><OrgnlMsgId>163FRAYBENTOS20240103081648</OrgnlMsgId><OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId><OrgnlNbOfTxs>5</OrgnlNbOfTxs><GrpSts>ACTC</GrpSts></OrgnlGrpInfAndSts></CstmrPmtStsRpt></Document>
+Data: <table class="table text-center"><thead><tr><th scope="col">LID</th><th scope="col">Pagos</th><th scope="col">$ Total</th><th scope="col">Company</th><th scope="col">Message ID</th><th scope="col"                           >Fecha</th></tr></thead><tbody><tr><td>163</td><td>5</td><td>$5,00</td><td>UPM Fray Bentos S.A.</td><td>163FRAYBENTOS</td><td>Jan, 05</td></tr></tbody></table>
+
+Proceso: Santander -- Fecha: 2024-01-03T08:16:20 -- Archivo: archive/UPM_SANTANDER_PAYROLL_UY_030124080631.xml
+Respuesta: <?xml version="1.0" encoding="utf-8"?><!-- Approval required --><!-- Processing time: 6 ms --><!-- Validation result: OK/OK --><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03"><CstmrPmtStsRpt><GrpHdr><MsgId>BTM-RSP-1704280580164-P</MsgId><CreDtTm>2024-01-03T11:16:20Z</CreDtTm></GrpHdr><OrgnlGrpInfAndSts><OrgnlMsgId>161FOSA20240103081605</OrgnlMsgId><OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId><OrgnlNbOfTxs>5</OrgnlNbOfTxs><GrpSts>ACTC</GrpSts></OrgnlGrpInfAndSts></CstmrPmtStsRpt></Document>
+Data: <table class="table text-center"><thead><tr><th scope="col">LID</th><th scope="col">Pagos</th><th scope="col">$ Total</th><th scope="col">Company</th><th scope="col">Message ID</th><th scope="col"                           >Fecha</th></tr></thead><tbody><tr><td>161</td><td>5</td><td>$5,00</td><td>Forestal Oriental S.A.</td><td>161FOSA</td><td>Jan, 05</td></tr></tbody></table>
+
+Error: Contable 2023-12-29T18:37:42 -- Archivo: archive/PROVISION SV-20231229183617.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2023-12-29T18:37:41 -- Archivo: archive/PROVISION LICENCIA-20231229183617.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2023-12-29T18:37:39 -- Archivo: archive/PROVISION AGUINALDO-20231229183617.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2023-12-29T18:37:37 -- Archivo: archive/APORTES PATRONALES-20231229183617.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2023-12-29T18:37:36 -- Archivo: archive/SALARIOS-20231229183617.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2023-12-29T09:55:38 -- Archivo: archive/PROVISION SV-20231229095527.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2023-12-29T09:55:36 -- Archivo: archive/PROVISION LICENCIA-20231229095527.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2023-12-29T09:55:35 -- Archivo: archive/PROVISION AGUINALDO-20231229095527.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2023-12-29T09:55:33 -- Archivo: archive/APORTES PATRONALES-20231229095527.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2023-12-29T09:55:31 -- Archivo: archive/SALARIOS-20231229095527.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2023-12-29T09:54:42 -- Archivo: archive/PROVISION SV-20231229095430.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2023-12-29T09:54:40 -- Archivo: archive/PROVISION LICENCIA-20231229095430.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2023-12-29T09:54:38 -- Archivo: archive/PROVISION AGUINALDO-20231229095430.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2023-12-29T09:54:37 -- Archivo: archive/APORTES PATRONALES-20231229095430.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2023-12-29T09:54:35 -- Archivo: archive/SALARIOS-20231229095430.xml -- <ErrorMessage><error>Delivery to SAP unsuccessful. Please contact UPM integration team.</error></ErrorMessage>
+
+Error: Contable 2023-12-21T07:53:59 -- Archivo: archive/PROVISION SV-20231221075249.xml -- <?xml version="1.0" encoding="UTF-8"?><NS1:Envelope xmlns:NS1="http://schemas.xmlsoap.org/soap/envelope/"><NS1:Body><NS1:Fault><faultcode>E5004</faultcode><faultstring>Payment Upload Interface Error (Not valid XML or other technical error)</faultstring><faultactor>Client.Payload</faultactor><detail/></NS1:Fault></NS1:Body></NS1:Envelope>
+
+Error: Contable 2023-12-21T07:53:57 -- Archivo: archive/PROVISION LICENCIA-20231221075249.xml -- <?xml version="1.0" encoding="UTF-8"?><NS1:Envelope xmlns:NS1="http://schemas.xmlsoap.org/soap/envelope/"><NS1:Body><NS1:Fault><faultcode>E5004</faultcode><faultstring>Payment Upload Interface Error (Not valid XML or other technical error)</faultstring><faultactor>Client.Payload</faultactor><detail/></NS1:Fault></NS1:Body></NS1:Envelope>
+
+Error: Contable 2023-12-21T07:53:56 -- Archivo: archive/PROVISION AGUINALDO-20231221075249.xml -- <?xml version="1.0" encoding="UTF-8"?><NS1:Envelope xmlns:NS1="http://schemas.xmlsoap.org/soap/envelope/"><NS1:Body><NS1:Fault><faultcode>E5004</faultcode><faultstring>Payment Upload Interface Error (Not valid XML or other technical error)</faultstring><faultactor>Client.Payload</faultactor><detail/></NS1:Fault></NS1:Body></NS1:Envelope>
+
+Error: Contable 2023-12-21T07:53:54 -- Archivo: archive/APORTES PATRONALES-20231221075249.xml -- <?xml version="1.0" encoding="UTF-8"?><NS1:Envelope xmlns:NS1="http://schemas.xmlsoap.org/soap/envelope/"><NS1:Body><NS1:Fault><faultcode>E5004</faultcode><faultstring>Payment Upload Interface Error (Not valid XML or other technical error)</faultstring><faultactor>Client.Payload</faultactor><detail/></NS1:Fault></NS1:Body></NS1:Envelope>
+
+Error: Contable 2023-12-21T07:53:53 -- Archivo: archive/SALARIOS-20231221075249.xml -- <?xml version="1.0" encoding="UTF-8"?><NS1:Envelope xmlns:NS1="http://schemas.xmlsoap.org/soap/envelope/"><NS1:Body><NS1:Fault><faultcode>E5004</faultcode><faultstring>Payment Upload Interface Error (Not valid XML or other technical error)</faultstring><faultactor>Client.Payload</faultactor><detail/></NS1:Fault></NS1:Body></NS1:Envelope>
+
+Proceso: Santander -- Fecha: 2023-12-20T16:06:52 -- Archivo: archive/UPM_SANTANDER_PAYROLL_UY_201223152924.xml
+Respuesta: <?xml version="1.0" encoding="utf-8"?><!-- Approval required --><!-- Processing time: 4 ms --><!-- Validation result: OK/OK --><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03"><CstmrPmtStsRpt><GrpHdr><MsgId>BTM-RSP-1703099212080-P</MsgId><CreDtTm>2023-12-20T19:06:52Z</CreDtTm></GrpHdr><OrgnlGrpInfAndSts><OrgnlMsgId>160UPMSA20231220160626</OrgnlMsgId><OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId><OrgnlNbOfTxs>5</OrgnlNbOfTxs><GrpSts>ACTC</GrpSts></OrgnlGrpInfAndSts></CstmrPmtStsRpt></Document>
+Data: <table class="table text-center"><thead><tr><th scope="col">LID</th><th scope="col">Pagos</th><th scope="col">$ Total</th><th scope="col">Company</th><th scope="col">Message ID</th><th scope="col"                           >Fecha</th></tr></thead><tbody><tr><td>160</td><td>5</td><td>$5,00</td><td>UPM S.A.</td><td>160UPMSA</td><td>Dec, 21</td></tr></tbody></table>
+
+Error: Contable 2023-12-20T10:07:23 -- Archivo: archive/SALARIOS-20231220100713.xml -- <?xml version="1.0" encoding="UTF-8"?><NS1:Envelope xmlns:NS1="http://schemas.xmlsoap.org/soap/envelope/"><NS1:Body><NS1:Fault><faultcode>E5004</faultcode><faultstring>Payment Upload Interface Error (Not valid XML or other technical error)</faultstring><faultactor>Client.Payload</faultactor><detail/></NS1:Fault></NS1:Body></NS1:Envelope>
+
+Error: Contable 2023-12-20T10:07:01 -- Archivo: Rutas no especificada
+
+Error: Contable 2023-12-20T10:01:08 -- Archivo: archive/PROVISION SV-20231220095941.xml -- <?xml version="1.0" encoding="UTF-8"?><NS1:Envelope xmlns:NS1="http://schemas.xmlsoap.org/soap/envelope/"><NS1:Body><NS1:Fault><faultcode>E5004</faultcode><faultstring>Payment Upload Interface Error (Not valid XML or other technical error)</faultstring><faultactor>Client.Payload</faultactor><detail/></NS1:Fault></NS1:Body></NS1:Envelope>
+
+Error: Contable 2023-12-20T10:01:06 -- Archivo: archive/PROVISION LICENCIA-20231220095941.xml -- <?xml version="1.0" encoding="UTF-8"?><NS1:Envelope xmlns:NS1="http://schemas.xmlsoap.org/soap/envelope/"><NS1:Body><NS1:Fault><faultcode>E5004</faultcode><faultstring>Payment Upload Interface Error (Not valid XML or other technical error)</faultstring><faultactor>Client.Payload</faultactor><detail/></NS1:Fault></NS1:Body></NS1:Envelope>
+
+Error: Contable 2023-12-20T10:01:05 -- Archivo: archive/PROVISION AGUINALDO-20231220095941.xml -- <?xml version="1.0" encoding="UTF-8"?><NS1:Envelope xmlns:NS1="http://schemas.xmlsoap.org/soap/envelope/"><NS1:Body><NS1:Fault><faultcode>E5004</faultcode><faultstring>Payment Upload Interface Error (Not valid XML or other technical error)</faultstring><faultactor>Client.Payload</faultactor><detail/></NS1:Fault></NS1:Body></NS1:Envelope>
+
+Error: Contable 2023-12-20T10:01:04 -- Archivo: archive/APORTES PATRONALES-20231220095941.xml -- <?xml version="1.0" encoding="UTF-8"?><NS1:Envelope xmlns:NS1="http://schemas.xmlsoap.org/soap/envelope/"><NS1:Body><NS1:Fault><faultcode>E5004</faultcode><faultstring>Payment Upload Interface Error (Not valid XML or other technical error)</faultstring><faultactor>Client.Payload</faultactor><detail/></NS1:Fault></NS1:Body></NS1:Envelope>
+
+Error: Contable 2023-12-20T10:01:02 -- Archivo: archive/SALARIOS-20231220095941.xml -- <?xml version="1.0" encoding="UTF-8"?><NS1:Envelope xmlns:NS1="http://schemas.xmlsoap.org/soap/envelope/"><NS1:Body><NS1:Fault><faultcode>E5004</faultcode><faultstring>Payment Upload Interface Error (Not valid XML or other technical error)</faultstring><faultactor>Client.Payload</faultactor><detail/></NS1:Fault></NS1:Body></NS1:Envelope>
+
+Error: Contable 2023-12-20T09:44:02 -- Archivo: archive/SALARIOS-20231220094323.xml -- <?xml version="1.0" encoding="UTF-8"?><NS1:Envelope xmlns:NS1="http://schemas.xmlsoap.org/soap/envelope/"><NS1:Body><NS1:Fault><faultcode>E5004</faultcode><faultstring>Payment Upload Interface Error (Not valid XML or other technical error)</faultstring><faultactor>Client.Payload</faultactor><detail/></NS1:Fault></NS1:Body></NS1:Envelope>
+
+Fecha: 2023-12-15T17:29:11 -- Archivo: archive/UPM_SANTANDER_PAYROLL_UY_241123110341.xml
+Respuesta: <?xml version="1.0" encoding="utf-8"?><!-- Approval required --><!-- Processing time: 2 ms --><!-- Validation result: OK/OK --><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03"><CstmrPmtStsRpt><GrpHdr><MsgId>BTM-RSP-1702672151288-T</MsgId><CreDtTm>2023-12-15T20:29:11Z</CreDtTm></GrpHdr><OrgnlGrpInfAndSts><OrgnlMsgId>165BIOFUELS20231215172907</OrgnlMsgId><OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId><OrgnlNbOfTxs>4</OrgnlNbOfTxs><GrpSts>ACTC</GrpSts></OrgnlGrpInfAndSts></CstmrPmtStsRpt></Document>
+Data: <table class="table text-center"><thead><tr><th scope="col">LID</th><th scope="col">Pagos</th><th scope="col">$ Total</th><th scope="col">Company</th><th scope="col">Message ID</th><th scope="col">Fecha</th></tr></thead><tbody><tr><td>165</td><td>4</td><td>$4,00</td><td>UPM Biofuels S.A.</td><td>165BIOFUELS</td><td>Nov, 27</td></tr></tbody></table>
+
+Fecha: 2023-12-15T20:20:30 -- Archivo: archive/UPM_SANTANDER_PAYROLL_UY_241123110341.xml
+Respuesta: <?xml version="1.0" encoding="utf-8"?><!-- Approval required --><!-- Processing time: 3 ms --><!-- Validation result: OK/OK --><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03"><CstmrPmtStsRpt><GrpHdr><MsgId>BTM-RSP-1702671630375-T</MsgId><CreDtTm>2023-12-15T20:20:30Z</CreDtTm></GrpHdr><OrgnlGrpInfAndSts><OrgnlMsgId>165BIOFUELS20231215202024</OrgnlMsgId><OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId><OrgnlNbOfTxs>4</OrgnlNbOfTxs><GrpSts>ACTC</GrpSts></OrgnlGrpInfAndSts></CstmrPmtStsRpt></Document>
+Data: <table class="table text-center"><thead><tr><th scope="col">LID</th><th scope="col">Pagos</th><th scope="col">$ Total</th><th scope="col">Company</th><th scope="col">Message ID</th><th scope="col">Fecha</th></tr></thead><tbody><tr><td>165</td><td>4</td><td>$4,00</td><td>UPM Biofuels S.A.</td><td>165BIOFUELS</td><td>Nov, 27</td></tr></tbody></table>
+
+Fecha: 2023-12-15T19:47:34 -- Archivo: archive/UPM_SANTANDER_PAYROLL_UY_151223164300.xml
+Respuesta: <?xml version="1.0" encoding="utf-8"?><!-- Approval required --><!-- Processing time: 2 ms --><!-- Validation result: OK/OK --><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03"><CstmrPmtStsRpt><GrpHdr><MsgId>BTM-RSP-1702669654671-T</MsgId><CreDtTm>2023-12-15T19:47:34Z</CreDtTm></GrpHdr><OrgnlGrpInfAndSts><OrgnlMsgId>160UPMSA20231215194731</OrgnlMsgId><OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId><OrgnlNbOfTxs>4</OrgnlNbOfTxs><GrpSts>ACTC</GrpSts></OrgnlGrpInfAndSts></CstmrPmtStsRpt></Document>
+Data: <table class="table text-center"><thead><tr><th scope="col">LID</th><th scope="col">Pagos</th><th scope="col">$ Total</th><th scope="col">Company</th><th scope="col">Message ID</th><th scope="col">Fecha</th></tr></thead><tbody><tr><td>160</td><td>4</td><td>$4,00</td><td>UPM S.A.</td><td>160UPMSA</td><td>Dec, 15</td></tr></tbody></table>
+
 Fecha: 2023-12-13T19:42:29 -- Archivo: archive/UPM_SANTANDER_PAYROLL_UY_241123110445.xml
 Respuesta: <?xml version="1.0" encoding="utf-8"?><!-- Approval required --><!-- Processing time: 3 ms --><!-- Validation result: OK/OK --><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03"><CstmrPmtStsRpt><GrpHdr><MsgId>BTM-RSP-1702496549520-T</MsgId><CreDtTm>2023-12-13T19:42:29Z</CreDtTm></GrpHdr><OrgnlGrpInfAndSts><OrgnlMsgId>165BIOFUELS20231213194221</OrgnlMsgId><OrgnlMsgNmId>pain.001.001.03</OrgnlMsgNmId><OrgnlNbOfTxs>4</OrgnlNbOfTxs><GrpSts>ACTC</GrpSts></OrgnlGrpInfAndSts></CstmrPmtStsRpt></Document>
 Data: <table class="table text-center"><thead><tr><th scope="col">LID</th><th scope="col">Pagos</th><th scope="col">$ Total</th><th scope="col">Company</th><th scope="col">Message ID</th><th scope="col">Fecha</th></tr></thead><tbody><tr><td>165</td><td>4</td><td>$4,00</td><td>UPM Biofuels S.A.</td><td>165BIOFUELS</td><td>Nov, 28</td></tr></tbody></table>

@@ -1086,11 +1086,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                 };
             };
 
-            if ($MonId != 'UYU' && $MonId != 'DOL' && $MonId != 'EUR') {
+            if ($MonId != 'UYU' && $MonId != 'USD' && $MonId != 'EUR') {
                 $error ++;
                 $msgs[$error] = array(
                     "danger",
-                    "El campo moneda debe contener la palabra UYU o EUR o DOL"
+                    "El campo moneda debe contener la palabra UYU o EUR o USD"
                 );
             }
             if (strlen($lid) != 3) {
@@ -1181,9 +1181,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                             );
                         }
                     }
-                    //celda D debe ser "UYU", "DOL" o "EUR"
+                    //celda D debe ser "UYU", "USD" o "EUR"
                     if (substr($coordenadas, 0, 1) == "D") {
-                        if ($valorCelda != 'UYU' && $valorCelda != 'DOL' && $valorCelda != 'EUR') {
+                        if ($valorCelda != 'UYU' && $valorCelda != 'USD' && $valorCelda != 'EUR') {
                             $error ++;
                             $msgs[$error] = array(
                                 "danger",
@@ -1609,29 +1609,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 		
 	<div class="d-grid gap-2 mb-3">
 		<a href="archive/<?php echo $document[0]; ?>.xml" download target="_blank"
-			class="btn btn-success">Descargar Archivo XML<br/><?php echo $document[0] ?>.xml}
+			class="btn btn-success">Descargar Archivo XML<br/><?php echo $document[0] ?>.xml
 		</a>
 	</div>
 	<?php endforeach;?>
 	<?php endif;?>
 	<?php if($proceso === "santander"):?>
-	<div class="d-grid gap-2 mb-5">
-		<a
-			href="enviar_por_internet.php?archivo=<?php echo $nombrearchivoxml; ?>"
-			class="btn btn-primary">Enviar por Internet</a>
-		<p>
-			<em>* La acción será registrada</em>
-		</p>
-	</div>
-	<?php else:?>
-        <div class="d-grid gap-2 mb-5">
-                <a
-                        href="enviar_por_internet.php?archivo=<?php echo $nombrearchivoxml; ?>"
-                        class="btn btn-primary disabled">Enviar por Internet</a>
-                <p>
-                        <em>* La acción será registrada</em>
-                </p>
-        </div>
+   <div class="d-grid gap-2 mb-5">
+     <a 
+       href="enviar_por_internet.php?proceso=santander&archivo=<?php echo $nombrearchivoxml; ?>" 
+       class="btn btn-primary">Enviar por Internet</a>
+  		<p>
+  			<em>* La acción será registrada</em>
+  		</p>
+	  </div>
+	<?php elseif($proceso === "contable"):?>
+    <!-- Form invisible con un foreach para poder enviar varios archivos -->
+    <form id="formEnviar" action="enviar_por_internet.php?proceso=contable" method="post">
+      <?php foreach($documentsTitles as $k=>$document):?>
+      <input type="hidden" name="archivos[]" value="archive/<?php echo $document[0] ?>.xml">
+      <?php endforeach;?>
+    </form>
+    <div class="d-grid gap-2 mb-5">
+            <a
+                onclick="document.getElementById('formEnviar').submit();"
+                class="btn btn-primary">Enviar por Internet</a>
+            <p>
+                <em>* La acción será registrada</em>
+            </p>
+    </div>
+  <?php elseif($proceso === "citi"):?>
+    <div class="d-grid gap-2 mb-5">
+      <a
+              href="enviar_por_internet.php?proceso=citi&archivo=<?php echo $nombrearchivoxml; ?>"
+              class="btn btn-primary">Enviar por Internet</a>
+      <p>
+              <em>* La acción será registrada</em>
+      </p>
+    </div>
 	<?php endif;?>
 	<div class="d-grid gap-2 mb-5">
 		<a type="button" href="index.php"
