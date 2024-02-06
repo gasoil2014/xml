@@ -157,11 +157,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                     );
             }
 
-            if ($MonId != 'UYU' && $MonId != 'DOL' && $MonId != 'EUR') {
+            if ($MonId != 'UYU' && $MonId != 'USD' && $MonId != 'EUR') {
                 $error ++;
                 $msgs[$error] = array(
                     "danger",
-                    "El campo moneda debe contener la palabra UYU o EUR o DOL"
+                    "El campo moneda debe contener la palabra UYU o EUR o USD"
                 );
             }
             if (strlen($lid) != 3) {
@@ -1187,7 +1187,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                             $error ++;
                             $msgs[$error] = array(
                                 "danger",
-                                "La celda '" . $coordenadas . "' debe contener la palabra UYU o EUR o DOL"
+                                "La celda '" . $coordenadas . "' debe contener la palabra UYU o EUR o USD"
                             );
                         }
                     }
@@ -1438,7 +1438,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
                         $item->addChild('Amount' , number_format(floatval($Amount), 2, '.', ''));
                         $item->addChild('CostCenter' , $CostCenter);
                         $item->addChild('Assignment' , $Assignment);
-                        $item->addChild('InternalOrder' , $InternalOrder);
+                        $item->addChild('Order' , $InternalOrder);
                         $item->addChild('WBS' , $WBS);
                         $item->addChild('Description' , $fechaDesde.'-'.$Description);
                     }
