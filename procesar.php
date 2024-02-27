@@ -1510,7 +1510,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 	</h6>
 	<?php if ($proceso != 'contable'):?>
 	<h6 class="mb-5">
-		El importe total procesado fue de <strong><?php echo $MonId;?> <?php echo $CtrlSum;?></strong>
+		El importe total procesado fue de <strong><?php echo $MonId;?> <?php echo number_format($CtrlSum, 2, ',', '.');?></strong>
 	</h6>
 	<?php else:?>
 	<h6 class="mb-5">
@@ -1526,7 +1526,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
 						<button class="accordion-button collapsed" type="button"
 							data-bs-toggle="collapse" data-bs-target="#collapseOne"
 							aria-expanded="false" aria-controls="collapseOne">
-                <?php echo $nombrearchivoxml?>.xml
+                <?php echo $nombrearchivoxml?>
               </button>
 					</h4>
 					<div id="collapseOne" class="accordion-collapse collapse"
@@ -1642,7 +1642,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && ! $error) {
     <div class="d-grid gap-2 mb-5">
       <a
               href="enviar_por_internet.php?proceso=citi&archivo=<?php echo $nombrearchivoxml; ?>"
-              class="btn btn-primary">Enviar por Internet</a>
+              class="btn btn-primary disabled">Enviar por Internet</a>
       <p>
               <em>* La acción será registrada</em>
       </p>
